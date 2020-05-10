@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.AuthRequestDao">
+
+    <insert id="insert"  keyProperty="request_id" useGeneratedKeys="true"
+            parameterType="com.mobilecourse.backend.model.AuthRequest">
+        INSERT INTO authrequest
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            sender_id, receiver_id, dept_name, id_num, user_type, id_card
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{sender_id}, #{receiver_id}, #{dept_name}, #{id_num}, #{user_type}, #{id_card}
+        </trim>;
+    </insert>
+
+    <select id="get" resultType="com.mobilecourse.backend.model.AuthRequest">
+        SELECT *
+        FROM AuthRequest
+        WHERE receiver_id = #{receiver_id}
+    </select>
+
+    <select id="getById" resultType="com.mobilecourse.backend.model.AuthRequest">
+        SELECT *
+        FROM AuthRequest
+        WHERE request_id = #{request_id}
+    </select>
+
+</mapper>

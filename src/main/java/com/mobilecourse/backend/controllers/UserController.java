@@ -48,12 +48,12 @@ public class UserController extends CommonController {
 	public String login(@RequestParam(value = "username")String username,
 	                       @RequestParam(value = "password")String password,
 	                    HttpServletRequest request) {
-		User u = userMapper.get(username);
+		User u = userMapper.getByName(username);
 		if(u == null){
 			return wrapperMsg(404, "user not exist");
 		}
 		else if(u.getPassword().equals(password)){
-			putInfoToSession(request, "username", u.getUsername());
+			putInfoToSession(request, "user_id", u.getUser_id());
 			return wrapperMsg(200, "login success");
 		}
 		else{
@@ -64,9 +64,40 @@ public class UserController extends CommonController {
 
 	@RequestMapping(value = "/logout", method = { RequestMethod.POST })
 	public String logout(HttpServletRequest request) {
-		removeInfoFromSession(request, "username");
+		removeInfoFromSession(request, "user_id");
 		return wrapperMsg(200, "logout success");
 	}
+
+	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })
+	public String getInfo(HttpServletRequest request) {
+		User u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
+		JSONObject wrapperMsg = new JSONObject();
+		wrapperMsg.put("code", 200);
+		wrapperMsg.put("avatar", u.getAvatar());
+		wrapperMsg.put("status", u.getStatus());
+		wrapperMsg.put("verified", u.getVerified());
+		if(u.getAdmin()){
+			wrapperMsg.put("section_id", u.getSection_id());
+		}
+		else{
+			wrapperMsg.put("dept_name", u.getDept_name());
+			wrapperMsg.put("id_num", u.getId_num());
+			wrapperMsg.put("user_type", u.getType());
+		}
+		return wrapperMsg.toJSONString();
+
+	}
+
+	@RequestMapping(value = "/modify-info", method = { RequestMethod.POST })
+	public String updateInfo(@RequestParam(value = "avatar", defaultValue = "")String avartar,
+	                     @RequestParam(value = "status",  defaultValue = "")String status,
+	                     HttpServletRequest request) {
+		userMapper.updateInfo((int) request.getSession().getAttribute("user_id"),
+								avartar, status);
+		return wrapperMsg(200, "success");
+	}
+
+
 
 
 

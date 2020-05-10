@@ -12,6 +12,15 @@ public interface UserDao {
 
 	void insert(User u);
 
-	User get(String username);
+	User getById(int user_id);
 
+	User getByName(String username);
+
+	User getByIdNum(String id_num);
+
+	User getBySectionId(int section_id);
+
+	void updateInfo(int user_id, String avatar, String status);
+
+	void updateInfoAuth(int user_id, Boolean verified, String dept_name, String user_type, String id_num);
 }

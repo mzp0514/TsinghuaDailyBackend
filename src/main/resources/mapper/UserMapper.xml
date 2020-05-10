@@ -14,10 +14,51 @@
         </trim>;
     </insert>
 
-    <select id="get" resultType="com.mobilecourse.backend.model.User">
+    <select id="getById" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getByName" resultType="com.mobilecourse.backend.model.User">
         SELECT *
         FROM user
         WHERE username = #{username}
     </select>
+
+    <select id="getByIdNum" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM user
+        WHERE id_num = #{id_num}
+    </select>
+
+    <select id="getBySectionId" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM user
+        WHERE section_id = #{section_id}
+    </select>
+
+    <update id="updateInfo">
+        UPDATE user
+        <set>
+            <if test="avatar!=null and avatar!='' ">
+                avatar = #{avatar},
+            </if>
+            <if test="status!=null and status!='' ">
+                status = #{status},
+            </if>
+        </set>
+        WHERE user_id = #{user_id};
+    </update>
+
+    <update id="updateInfoAuth">
+        UPDATE user
+        SET verified = #{verified},
+            dept_name = #{dept_name},
+            user_type = #{user_type},
+            id_num = #{id_num}
+        WHERE user_id = #{user_id};
+    </update>
+
 
 </mapper>

@@ -9,7 +9,7 @@ public class User {
 	private Boolean verified;
 	private Boolean admin;
 	private String dept_name;
-	private String type; //('Undergraduate', 'Graduate', 'Staff'))
+	private String user_type; //('Undergraduate', 'Graduate', 'Staff'))
 	private String id_num;
 	private int section_id;
 
@@ -78,11 +78,11 @@ public class User {
 	}
 
 	public String getType() {
-		return type;
+		return user_type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setType(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public String getId_num() {

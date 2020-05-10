@@ -188,3 +188,35 @@ CHANGE COLUMN `admin` `admin` TINYINT(3) UNSIGNED ZEROFILL NOT NULL DEFAULT 0 ;
 ALTER TABLE `tsinghuadaily`.`user` 
 ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
 ;
+
+ALTER TABLE `tsinghuadaily`.`authrequest` 
+DROP COLUMN `class_id`;
+
+ALTER TABLE `tsinghuadaily`.`user` 
+CHANGE COLUMN `type` `user_type` VARCHAR(20) CHARACTER SET 'utf8' NULL DEFAULT NULL ;
+
+ALTER TABLE `tsinghuadaily`.`authrequest` 
+ADD COLUMN `id_num` VARCHAR(20) NULL AFTER `id_card`;
+
+ALTER TABLE `tsinghuadaily`.`authrequest` 
+CHANGE COLUMN `type` `user_type` VARCHAR(20) NULL DEFAULT NULL ;
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('软件学院',
+ 'faculty');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`)
+VALUES
+('se',
+'se',
+1,
+1,
+1);

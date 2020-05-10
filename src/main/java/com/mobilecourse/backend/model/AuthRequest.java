@@ -5,8 +5,8 @@ public class AuthRequest {
 	private int sender_id;
 	private int receiver_id;
 	private String dept_name;
-	private String class_id;
-	private String type;//(type in ('Undergraduate', 'Graduate', 'Staff'))
+	private String id_num;
+	private String user_type;//(type in ('Undergraduate', 'Graduate', 'Staff'))
 	private String id_card;
 
 	public int getRequest_id() {
@@ -42,11 +42,11 @@ public class AuthRequest {
 	}
 
 	public String getType() {
-		return type;
+		return user_type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setType(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public String getId_card() {
@@ -57,11 +57,18 @@ public class AuthRequest {
 		this.id_card = id_card;
 	}
 
-	public String getClass_id() {
-		return class_id;
+	public String getId_num() {
+		return id_num;
 	}
 
-	public void setClass_id(String class_id) {
-		this.class_id = class_id;
+	public void setId_num(String id_num) {
+		this.id_num = id_num;
+	}
+
+	@Override
+	public String toString() {
+		return "AuthRequest [request_id=" + request_id + ", sender_id=" + sender_id +
+				", receiver_id=" + receiver_id + ", dept_name=" + dept_name + ", id_num=" +
+				id_num + ", user_type=" + user_type + ", id_card=" + id_card + "]";
 	}
 }
