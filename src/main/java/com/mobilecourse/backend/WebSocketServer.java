@@ -47,7 +47,7 @@ public class WebSocketServer {
     // 收到消息时候的处理
     @OnMessage
     public void onMessage(String message, Session session) {
-
+        System.out.println(message);
     }
 
     @OnError

@@ -9,8 +9,11 @@ import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Hashtable;
@@ -19,7 +22,7 @@ import java.util.List;
 @RestController
 @EnableAutoConfiguration
 //设置此参数可以给这个类的所有接口都加上前缀
-//@RequestMapping("/test")
+@RequestMapping("/test")
 public class TestController extends CommonController {
 
     @Autowired
@@ -59,6 +62,7 @@ public class TestController extends CommonController {
     // 使用POST请求上传文件
     @RequestMapping(value = "/upload", method = { RequestMethod.POST })
     public String upload(@RequestParam(value = "file")MultipartFile file) {
+
         return wrapperMsg(200, file.getOriginalFilename());
     }
 

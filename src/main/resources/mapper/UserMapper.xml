@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.UserDao">
+
+
+    <insert id="insert"  keyProperty="user_id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.User">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            username, password
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{username}, #{password}
+        </trim>;
+    </insert>
+
+    <select id="get" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+</mapper>
