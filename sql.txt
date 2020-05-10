@@ -1,0 +1,190 @@
+DROP DATABASE IF EXISTS `tsinghuadaily`;
+CREATE SCHEMA `tsinghuadaily`;
+
+CREATE TABLE `tsinghuadaily`.`user` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL,
+  `password` VARCHAR(45) CHARACTER SET 'utf8' NOT NULL,
+  `avatar` VARCHAR(45) CHARACTER SET 'utf8' NULL,
+  `status` VARCHAR(80) CHARACTER SET 'utf8' NULL,
+  `verified` TINYINT ZEROFILL NOT NULL,
+  `admin` TINYINT ZEROFILL NOT NULL,
+  `dept_name` VARCHAR(30) CHARACTER SET 'utf8' NULL,
+  `type` VARCHAR(20) CHARACTER SET 'utf8' NULL,
+  `id_num` VARCHAR(20) NULL,
+  `section_id` INT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `id_num_UNIQUE` (`id_num` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`section` (
+  `section_id` INT NOT NULL AUTO_INCREMENT,
+  `section_name` VARCHAR(30) CHARACTER SET 'utf8' NOT NULL,
+  `category` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL,
+  PRIMARY KEY (`section_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+ALTER TABLE `tsinghuadaily`.`user` 
+ADD INDEX `section_id_idx` (`section_id` ASC) VISIBLE;
+;
+ALTER TABLE `tsinghuadaily`.`user` 
+ADD CONSTRAINT `section_id`
+  FOREIGN KEY (`section_id`)
+  REFERENCES `tsinghuadaily`.`section` (`section_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+CREATE TABLE `tsinghuadaily`.`follow` (
+  `user_id` INT NOT NULL,
+  `section_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `section_id`),
+  INDEX `section_id_idx` (`section_id` ASC) VISIBLE,
+  CONSTRAINT `follow_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `follow_section_id`
+    FOREIGN KEY (`section_id`)
+    REFERENCES `tsinghuadaily`.`section` (`section_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`member` (
+  `user_id` INT NOT NULL,
+  `section_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `section_id`),
+  INDEX `member_section_id_idx` (`section_id` ASC) VISIBLE,
+  CONSTRAINT `member_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `member_section_id`
+    FOREIGN KEY (`section_id`)
+    REFERENCES `tsinghuadaily`.`section` (`section_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`article` (
+  `article_id` INT NOT NULL AUTO_INCREMENT,
+  `section_id` INT NOT NULL,
+  `title` VARCHAR(45) CHARACTER SET 'utf8' NOT NULL,
+  `author_name` VARCHAR(45) NOT NULL,
+  `publish_time` TIMESTAMP NOT NULL,
+  `content` LONGTEXT NOT NULL,
+  `view_num` INT ZEROFILL NULL,
+  `reader` VARCHAR(10) NOT NULL DEFAULT 'All',
+  PRIMARY KEY (`article_id`, `section_id`),
+  INDEX `article_belong_idx` (`section_id` ASC) VISIBLE,
+  CONSTRAINT `article_belong`
+    FOREIGN KEY (`section_id`)
+    REFERENCES `tsinghuadaily`.`section` (`section_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`comment` (
+  `comment_id` INT NOT NULL AUTO_INCREMENT,
+  `article_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `content` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`comment_id`, `article_id`),
+  INDEX `comment_article_id_idx` (`article_id` ASC) VISIBLE,
+  INDEX `comment_user_id_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `comment_article_id`
+    FOREIGN KEY (`article_id`)
+    REFERENCES `tsinghuadaily`.`article` (`article_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `comment_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`favourite` (
+  `article_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`article_id`, `user_id`),
+  INDEX `favourite_user_id_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `favourite_article_id`
+    FOREIGN KEY (`article_id`)
+    REFERENCES `tsinghuadaily`.`article` (`article_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `favourite_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`authrequest` (
+  `request_id` INT NOT NULL AUTO_INCREMENT,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `dept_name` VARCHAR(30) CHARACTER SET 'utf8' NULL,
+  `class` VARCHAR(20) NULL,
+  `type` VARCHAR(20) NULL,
+  `id_card` VARCHAR(45) NULL,
+  PRIMARY KEY (`request_id`, `sender_id`, `receiver_id`),
+  INDEX `auth_sender_idx` (`sender_id` ASC) VISIBLE,
+  INDEX `auth_receiver_idx` (`receiver_id` ASC) VISIBLE,
+  CONSTRAINT `auth_sender`
+    FOREIGN KEY (`sender_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `auth_receiver`
+    FOREIGN KEY (`receiver_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `tsinghuadaily`.`message` (
+  `receiver_id` INT NOT NULL,
+  `sender_id` INT NOT NULL,
+  `content` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`receiver_id`, `sender_id`),
+  INDEX `msg_sender_idx` (`sender_id` ASC) VISIBLE,
+  CONSTRAINT `msg_receiver`
+    FOREIGN KEY (`receiver_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `msg_sender`
+    FOREIGN KEY (`sender_id`)
+    REFERENCES `tsinghuadaily`.`user` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+ALTER TABLE `tsinghuadaily`.`message` 
+ADD COLUMN `send_time` TIMESTAMP NOT NULL AFTER `content`;
+
+ALTER TABLE `tsinghuadaily`.`authrequest` 
+CHANGE COLUMN `class` `class_id` VARCHAR(20) NULL DEFAULT NULL ;
+
+ALTER TABLE `tsinghuadaily`.`user` 
+CHANGE COLUMN `verified` `verified` TINYINT(3) UNSIGNED ZEROFILL NOT NULL DEFAULT 0 ;
+
+ALTER TABLE `tsinghuadaily`.`user` 
+CHANGE COLUMN `admin` `admin` TINYINT(3) UNSIGNED ZEROFILL NOT NULL DEFAULT 0 ;
+
+ALTER TABLE `tsinghuadaily`.`user` 
+ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
+;
