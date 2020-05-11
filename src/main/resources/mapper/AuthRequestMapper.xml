@@ -26,4 +26,9 @@
         WHERE request_id = #{request_id}
     </select>
 
+    <delete id="delete">
+        DELETE FROM AuthRequest
+        WHERE request_id=#{request_id}
+    </delete>
+
 </mapper>

@@ -12,4 +12,6 @@ public interface AuthRequestDao {
 
 	AuthRequest getById(int request_id);
 
+	void delete(int request_id);
+
 }

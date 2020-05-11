@@ -6,13 +6,13 @@ import com.mobilecourse.backend.dao.SectionDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.AuthRequest;
 import com.mobilecourse.backend.model.User;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -51,12 +51,15 @@ public class AuthRequestController extends CommonController {
 		return wrapperMsg(200, "success");
 	}
 
-	@RequestMapping(value = "/get", method = { RequestMethod.GET })
+	@RequestMapping(value = "/get-requests", method = { RequestMethod.GET })
 	public String get(HttpServletRequest request) {
 		int uid = (Integer) request.getSession().getAttribute("user_id");
 		List<AuthRequest> requests = AuthRequestMapper.get(uid);
 		JSONArray js = JSONArray.fromObject(requests);
-		return wrapperMsg(200, js.toString());
+		JSONObject wrapperMsg = new JSONObject();
+		wrapperMsg.put("code", 200);
+		wrapperMsg.put("requests", js);
+		return wrapperMsg.toString();
 	}
 
 	@RequestMapping(value = "/approve", method = { RequestMethod.POST })
@@ -65,6 +68,7 @@ public class AuthRequestController extends CommonController {
 		AuthRequest rq = AuthRequestMapper.getById(request_id);
 		UserMapper.updateInfoAuth(rq.getSender_id(), true, rq.getDept_name(),
 										rq.getType(), rq.getId_num());
+		AuthRequestMapper.delete(request_id);
 		return wrapperMsg(200, "success");
 	}
 }
