@@ -68,8 +68,8 @@ public class UserController extends CommonController {
 		return wrapperMsg(200, "logout success");
 	}
 
-	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })
-	public String getInfo(HttpServletRequest request) {
+	@RequestMapping(value = "/get-self-info", method = { RequestMethod.GET })
+	public String getSelfInfo(HttpServletRequest request) {
 		User u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
@@ -88,6 +88,31 @@ public class UserController extends CommonController {
 
 	}
 
+	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })
+	public String getInfo(@RequestParam(value = "id_num")String id_num,
+	                      HttpServletRequest request) {
+		try {
+			User u = userMapper.getByIdNum(id_num);
+			JSONObject wrapperMsg = new JSONObject();
+			wrapperMsg.put("code", 200);
+			wrapperMsg.put("avatar", u.getAvatar());
+			wrapperMsg.put("status", u.getStatus());
+			wrapperMsg.put("verified", u.getVerified());
+			if(u.getAdmin()){
+				wrapperMsg.put("section_id", u.getSection_id());
+			}
+			else{
+				wrapperMsg.put("dept_name", u.getDept_name());
+				wrapperMsg.put("id_num", u.getId_num());
+				wrapperMsg.put("user_type", u.getType());
+			}
+			return wrapperMsg.toJSONString();
+		}
+		catch (Exception e){
+			return wrapperMsg(404, "user not exist");
+		}
+	}
+
 	@RequestMapping(value = "/modify-info", method = { RequestMethod.POST })
 	public String updateInfo(@RequestParam(value = "avatar", defaultValue = "")String avartar,
 	                     @RequestParam(value = "status",  defaultValue = "")String status,
@@ -96,9 +121,5 @@ public class UserController extends CommonController {
 								avartar, status);
 		return wrapperMsg(200, "success");
 	}
-
-
-
-
 
 }

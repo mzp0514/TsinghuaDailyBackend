@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.ArticleDao">
+    <select id="selectBySectionId" resultType="com.mobilecourse.backend.model.Article">
+        SELECT *
+        FROM article
+        WHERE section_id = #{section_id}
+    </select>
+
+    <select id="selectByCategory" resultType="com.mobilecourse.backend.model.Article">
+        SELECT *
+        FROM article
+        WHERE category = #{category}
+    </select>
+
+    <select id="getById" resultType="com.mobilecourse.backend.model.Article">
+        SELECT *
+        FROM article
+        WHERE article_id = #{article_id}
+    </select>
+
+    <insert id="insert"  keyProperty="article_id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.Article">
+        INSERT INTO Article
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            section_id, title, author_name, publish_time, content, reader, category, view_num, fav_num
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{section_id}, #{title}, #{author_name}, #{publish_time}, #{content}, #{reader}, #{category}, 0, 0
+        </trim>;
+    </insert>
+
+</mapper>

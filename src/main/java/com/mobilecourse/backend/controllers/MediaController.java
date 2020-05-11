@@ -1,7 +1,5 @@
 package com.mobilecourse.backend.controllers;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.WebSocketServer;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.Test;
@@ -59,7 +57,7 @@ public class MediaController extends CommonController {
 
 	}
 
-	@RequestMapping(value = "/get-image",method = RequestMethod.POST)
+	@RequestMapping(value = "/get-image",method = RequestMethod.GET)
 	@ResponseBody
 	public HttpServletResponse getImage(@RequestParam(value = "filename") String filename,
 	                                    HttpServletRequest request, HttpServletResponse response) {

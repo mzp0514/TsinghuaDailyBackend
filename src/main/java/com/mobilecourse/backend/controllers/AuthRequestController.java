@@ -1,10 +1,11 @@
 package com.mobilecourse.backend.controllers;
 
-//import com.alibaba.fastjson.JSONArray;
 import com.mobilecourse.backend.dao.AuthRequestDao;
+import com.mobilecourse.backend.dao.MemberDao;
 import com.mobilecourse.backend.dao.SectionDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.AuthRequest;
+import com.mobilecourse.backend.model.Member;
 import com.mobilecourse.backend.model.User;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class AuthRequestController extends CommonController {
 
 	@Autowired
 	private SectionDao SectionMapper;
+
+	@Autowired
+	private MemberDao MemberMapper;
 
 	@RequestMapping(value = "/request", method = { RequestMethod.POST })
 	public String request(@RequestParam(value = "id_num")String id_num,
@@ -69,6 +73,10 @@ public class AuthRequestController extends CommonController {
 		UserMapper.updateInfoAuth(rq.getSender_id(), true, rq.getDept_name(),
 										rq.getType(), rq.getId_num());
 		AuthRequestMapper.delete(request_id);
+		Member m = new Member();
+		m.setSection_id(SectionMapper.getBySectionName(rq.getDept_name()).getSection_id());
+		m.setUser_id(rq.getSender_id());
+		MemberMapper.insert(m);
 		return wrapperMsg(200, "success");
 	}
 }

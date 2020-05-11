@@ -13,4 +13,22 @@
         FROM section
         WHERE section_name = #{section_name}
     </select>
+
+    <select id="selectByCategory" resultType="com.mobilecourse.backend.model.Section">
+        SELECT *
+        FROM section
+        WHERE category = #{category}
+    </select>
+
+    <update id="updateFollowerCnt">
+        UPDATE section
+        SET follower_cnt = #{update_num} + follower_cnt
+        WHERE section_id = #{section_id}
+    </update>
+
+    <update id="updateArticleCnt">
+        UPDATE section
+        SET article_cnt = #{update_num} + article_cnt
+        WHERE section_id = #{section_id}
+    </update>
 </mapper>

@@ -4,6 +4,8 @@ public class Section {
 	private int section_id;
 	private String section_name;
 	private String category;
+	private int follower_cnt;
+	private int article_cnt;
 
 	public int getSection_id() {
 		return section_id;
@@ -27,5 +29,16 @@ public class Section {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Section{" +
+				"section_id=" + section_id +
+				", section_name='" + section_name + '\'' +
+				", follower_cnt=" + follower_cnt +
+				", article_cnt=" + article_cnt +
+				'}';
 	}
 }

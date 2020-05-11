@@ -213,10 +213,26 @@ VALUES
 `password`,
 `verified`,
 `admin`,
-`section_id`)
+`section_id`,
+`dept_name`,
+`user_type`)
 VALUES
 ('se',
 'se',
 1,
 1,
-1);
+1,
+'软件学院',
+'Staff');
+
+ALTER TABLE `tsinghuadaily`.`section` 
+ADD COLUMN `follower_cnt` INT ZEROFILL NULL AFTER `category`,
+ADD COLUMN `article_cnt` INT ZEROFILL NULL AFTER `follower_cnt`;
+
+ALTER TABLE `tsinghuadaily`.`article` 
+ADD COLUMN `category` VARCHAR(10) NOT NULL DEFAULT 'Campus' AFTER `reader`;
+
+ALTER TABLE `tsinghuadaily`.`article` 
+ADD COLUMN `fav_num` INT ZEROFILL NULL AFTER `category`;
+
+

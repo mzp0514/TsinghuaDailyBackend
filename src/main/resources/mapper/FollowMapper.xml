@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.FollowDao">
+
+    <insert id="insert" parameterType="com.mobilecourse.backend.model.Follow">
+        INSERT INTO Follow
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            user_id, section_id
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{user_id}, #{section_id}
+        </trim>;
+    </insert>
+
+    <select id="selectByUserId" resultType="com.mobilecourse.backend.model.Follow">
+        SELECT *
+        FROM follow
+        WHERE user_id = #{user_id}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM follow
+        WHERE user_id=#{user_id} AND section_id=#{section_id}
+    </delete>
+
+    <select id="get" resultType="com.mobilecourse.backend.model.Follow">
+        SELECT *
+        FROM follow
+        WHERE user_id = #{user_id} AND section_id = #{section_id}
+    </select>
+
+</mapper>

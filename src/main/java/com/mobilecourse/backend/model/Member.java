@@ -4,6 +4,7 @@ public class Member {
 	private int user_id;
 	private int section_id;
 
+
 	public int getUser_id() {
 		return user_id;
 	}
@@ -19,4 +20,6 @@ public class Member {
 	public void setSection_id(int section_id) {
 		this.section_id = section_id;
 	}
+
+
 }

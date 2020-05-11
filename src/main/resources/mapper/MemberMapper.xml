@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.MemberDao">
+
+    <insert id="insert"  parameterType="com.mobilecourse.backend.model.Member">
+        INSERT INTO Member
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            user_id, section_id
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{user_id}, #{section_id}
+        </trim>;
+    </insert>
+
+    <select id="get" resultType="com.mobilecourse.backend.model.Member">
+        SELECT *
+        FROM member
+        WHERE user_id = #{user_id} AND section_id = #{section_id}
+    </select>
+
+
+
+</mapper>

@@ -2,15 +2,18 @@ package com.mobilecourse.backend.model;
 
 import java.sql.Timestamp;
 
-public class Article {
+public class Article implements Comparable<Article> {
 	private int article_id;
 	private int section_id;
 	private String title;
 	private String author_name;
 	private Timestamp publish_time;
 	private String content;
-	private int view;
+	private int view_num;
+	private int fav_num;
 	private String reader; //'All', 'Staff', 'Member', 'MemberStaff'
+	private String category;
+
 
 	public int getArticle_id() {
 		return article_id;
@@ -60,19 +63,55 @@ public class Article {
 		this.content = content;
 	}
 
-	public int getView() {
-		return view;
-	}
-
-	public void setView(int view) {
-		this.view = view;
-	}
-
 	public String getReader() {
 		return reader;
 	}
 
 	public void setReader(String reader) {
 		this.reader = reader;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+
+	@Override
+	public int compareTo(Article a) {
+		return this.publish_time.compareTo(a.getPublish_time());
+	}
+
+	public int getView_num() {
+		return view_num;
+	}
+
+	public void setView_num(int view_num) {
+		this.view_num = view_num;
+	}
+
+	public int getFav_num() {
+		return fav_num;
+	}
+
+	public void setFav_num(int fav_num) {
+		this.fav_num = fav_num;
+	}
+
+	@Override
+	public String toString() {
+		return "Article{" +
+				"article_id=" + article_id +
+				", section_id=" + section_id +
+				", title='" + title + '\'' +
+				", author_name='" + author_name + '\'' +
+				", publish_time=" + publish_time +
+				", view_num=" + view_num +
+				", fav_num=" + fav_num +
+				", reader='" + reader + '\'' +
+				'}';
 	}
 }
