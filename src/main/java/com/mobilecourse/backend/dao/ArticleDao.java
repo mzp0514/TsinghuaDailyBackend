@@ -13,4 +13,10 @@ public interface ArticleDao {
 	Article getById(int article_id);
 
 	void insert(Article a);
+
+	void delete(int article_id);
+
+	void updateViewCnt(int article_id, int update_num);
+
+	void updateFavCnt(int article_id, int update_num);
 }

@@ -1,10 +1,13 @@
 package com.mobilecourse.backend.model;
 
+import java.sql.Timestamp;
+
 public class Comment {
 	private int article_id;
 	private int comment_id;
 	private int user_id;
 	private String content;
+	private Timestamp add_time;
 
 	public int getArticle_id() {
 		return article_id;
@@ -36,5 +39,23 @@ public class Comment {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Timestamp getAdd_time() {
+		return add_time;
+	}
+
+	public void setAdd_time(Timestamp add_time) {
+		this.add_time = add_time;
+	}
+
+	@Override
+	public String toString() {
+		return "Comment{" +
+				"article_id=" + article_id +
+				", comment_id=" + comment_id +
+				", content='" + content + '\'' +
+				", add_time=" + add_time +
+				'}';
 	}
 }

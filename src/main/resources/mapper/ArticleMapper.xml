@@ -30,4 +30,21 @@
         </trim>;
     </insert>
 
+    <delete id="delete">
+        DELETE FROM article
+        WHERE article_id=#{article_id}
+    </delete>
+
+    <update id="updateViewCnt">
+        UPDATE article
+        SET view_num = #{update_num} + view_num
+        WHERE article_id = #{article_id}
+    </update>
+
+    <update id="updateFavCnt">
+        UPDATE article
+        SET fav_num = #{update_num} + fav_num
+        WHERE article_id = #{article_id}
+    </update>
+
 </mapper>

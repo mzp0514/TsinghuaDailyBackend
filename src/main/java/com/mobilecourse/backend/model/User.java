@@ -100,4 +100,14 @@ public class User {
 	public void setSection_id(int section_id) {
 		this.section_id = section_id;
 	}
+
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"user_id=" + user_id +
+				", username='" + username + '\'' +
+				", avatar='" + avatar + '\'' +
+				'}';
+	}
 }

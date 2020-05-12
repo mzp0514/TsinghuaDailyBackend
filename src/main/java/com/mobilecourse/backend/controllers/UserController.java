@@ -1,24 +1,16 @@
 package com.mobilecourse.backend.controllers;
 
-import com.alibaba.fastjson.JSONArray;
+
 import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.WebSocketServer;
 import com.mobilecourse.backend.dao.UserDao;
-import com.mobilecourse.backend.model.Test;
 import com.mobilecourse.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.LocalDateTime;
-import java.util.Hashtable;
-import java.util.List;
+
 
 @RestController
 @EnableAutoConfiguration
@@ -76,16 +68,15 @@ public class UserController extends CommonController {
 		wrapperMsg.put("avatar", u.getAvatar());
 		wrapperMsg.put("status", u.getStatus());
 		wrapperMsg.put("verified", u.getVerified());
+		wrapperMsg.put("dept_name", u.getDept_name());
+		wrapperMsg.put("user_type", u.getType());
 		if(u.getAdmin()){
 			wrapperMsg.put("section_id", u.getSection_id());
 		}
 		else{
-			wrapperMsg.put("dept_name", u.getDept_name());
 			wrapperMsg.put("id_num", u.getId_num());
-			wrapperMsg.put("user_type", u.getType());
 		}
 		return wrapperMsg.toJSONString();
-
 	}
 
 	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })

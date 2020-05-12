@@ -1,26 +1,17 @@
 package com.mobilecourse.backend.controllers;
 
-import com.mobilecourse.backend.WebSocketServer;
-import com.mobilecourse.backend.dao.UserDao;
-import com.mobilecourse.backend.model.Test;
-import com.mobilecourse.backend.model.User;
+
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.LocalDateTime;
-import java.util.Hashtable;
-import java.util.List;
+
 
 @RestController
 @EnableAutoConfiguration

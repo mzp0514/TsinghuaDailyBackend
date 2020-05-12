@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.CommentDao">
+
+    <insert id="insert"  keyProperty="comment_id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.Comment">
+        INSERT INTO comment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            user_id, article_id, content, add_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{user_id}, #{article_id}, #{content}, #{add_time}
+        </trim>;
+    </insert>
+
+
+    <select id="select" resultType="com.mobilecourse.backend.model.Comment">
+        SELECT *
+        FROM comment
+        WHERE article_id = #{article_id}
+    </select>
+
+
+    <delete id="delete">
+        DELETE FROM comment
+        WHERE comment_id=#{comment_id}
+    </delete>
+
+</mapper>

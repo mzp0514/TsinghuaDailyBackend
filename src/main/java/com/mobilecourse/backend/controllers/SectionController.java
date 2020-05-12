@@ -1,13 +1,11 @@
 package com.mobilecourse.backend.controllers;
 
-import com.mobilecourse.backend.dao.AuthRequestDao;
+
 import com.mobilecourse.backend.dao.FollowDao;
 import com.mobilecourse.backend.dao.SectionDao;
-import com.mobilecourse.backend.dao.UserDao;
-import com.mobilecourse.backend.model.AuthRequest;
+
 import com.mobilecourse.backend.model.Follow;
 import com.mobilecourse.backend.model.Section;
-import com.mobilecourse.backend.model.User;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -74,7 +72,7 @@ public class SectionController extends CommonController {
 		f.setUser_id((Integer) request.getSession().getAttribute("user_id"));
 		followMapper.delete(f);
 		sectionMapper.updateFollowerCnt(section_id, -1);
-		return wrapperMsg(200, "follow success");
+		return wrapperMsg(200, "unfollow success");
 	}
 
 	@RequestMapping(value = "/section-info", method = { RequestMethod.GET })

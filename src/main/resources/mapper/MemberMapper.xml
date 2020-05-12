@@ -4,7 +4,7 @@
 <mapper namespace="com.mobilecourse.backend.dao.MemberDao">
 
     <insert id="insert"  parameterType="com.mobilecourse.backend.model.Member">
-        INSERT INTO Member
+        INSERT INTO member
         <trim prefix="(" suffix=")" suffixOverrides="," >
             user_id, section_id
         </trim>

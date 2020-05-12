@@ -206,7 +206,7 @@ INSERT INTO `tsinghuadaily`.`section`
 `category`)
 VALUES
 ('软件学院',
- 'faculty');
+ 'Faculty');
 
  INSERT INTO `tsinghuadaily`.`user`
 (`username`,
@@ -235,4 +235,10 @@ ADD COLUMN `category` VARCHAR(10) NOT NULL DEFAULT 'Campus' AFTER `reader`;
 ALTER TABLE `tsinghuadaily`.`article` 
 ADD COLUMN `fav_num` INT ZEROFILL NULL AFTER `category`;
 
+ALTER TABLE `tsinghuadaily`.`comment` 
+ADD COLUMN `add_time` DATETIME NOT NULL AFTER `content`;
+
+ALTER TABLE `tsinghuadaily`.`article` 
+CHANGE COLUMN `reader` `reader` VARCHAR(15) NOT NULL DEFAULT 'All' ,
+CHANGE COLUMN `category` `category` VARCHAR(15) NOT NULL DEFAULT 'Campus' ;
 
