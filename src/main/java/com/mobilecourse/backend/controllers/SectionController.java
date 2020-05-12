@@ -34,7 +34,7 @@ public class SectionController extends CommonController {
 	public String getCategorySections(@RequestParam(value = "category") String category,
 	                                  HttpServletRequest request) {
 		ArrayList<Section> sections = null;
-		if(category.equals("follow")){
+		if(category.equals("Follow")){
 			int uid = (int) request.getSession().getAttribute("user_id");
 			List<Follow> follows = followMapper.selectByUserId(uid);
 			for(int i = 0; i < follows.size(); i++){
