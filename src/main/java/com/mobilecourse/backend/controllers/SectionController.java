@@ -85,14 +85,13 @@ public class SectionController extends CommonController {
 			followed = false;
 		}
 		Section s = sectionMapper.getBySectionId(section_id);
-		JSONObject js = JSONObject.fromObject(s);
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("followed", followed);
-		wrapperMsg.put("section", js);
+		wrapperMsg.put("category", s.getCategory());
+		wrapperMsg.put("section_id", s.getSection_id());
+		wrapperMsg.put("section_name", s.getSection_name());
 		return wrapperMsg.toString();
 	}
-
-
 
 }
