@@ -1,14 +1,15 @@
 package com.mobilecourse.backend.dao;
 
 import com.mobilecourse.backend.model.Article;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 
 public interface ArticleDao {
 
-	List<Article> selectBySectionId(int section_id);
+	List<Article> selectBySectionId(int section_id, int self_section_id, boolean is_staff);
 
-	List<Article> selectByCategory(String category);
+	List<Article> selectByCategory(String category, int user_id, int section_id, boolean is_staff);
 
 	Article getById(int article_id);
 

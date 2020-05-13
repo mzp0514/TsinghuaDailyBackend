@@ -17,7 +17,9 @@
     <select id="selectByCategory" resultType="com.mobilecourse.backend.model.Section">
         SELECT *
         FROM section
-        WHERE category = #{category}
+        <if test="category!=''">
+            WHERE category = #{category}
+        </if>
     </select>
 
     <update id="updateFollowerCnt">

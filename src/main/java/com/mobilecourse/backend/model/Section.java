@@ -41,4 +41,20 @@ public class Section {
 				", article_cnt=" + article_cnt +
 				'}';
 	}
+
+	public int getFollower_cnt() {
+		return follower_cnt;
+	}
+
+	public void setFollower_cnt(int follower_cnt) {
+		this.follower_cnt = follower_cnt;
+	}
+
+	public int getArticle_cnt() {
+		return article_cnt;
+	}
+
+	public void setArticle_cnt(int article_cnt) {
+		this.article_cnt = article_cnt;
+	}
 }

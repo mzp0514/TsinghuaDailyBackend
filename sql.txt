@@ -54,24 +54,6 @@ CREATE TABLE `tsinghuadaily`.`follow` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE `tsinghuadaily`.`member` (
-  `user_id` INT NOT NULL,
-  `section_id` INT NOT NULL,
-  PRIMARY KEY (`user_id`, `section_id`),
-  INDEX `member_section_id_idx` (`section_id` ASC) VISIBLE,
-  CONSTRAINT `member_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `tsinghuadaily`.`user` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `member_section_id`
-    FOREIGN KEY (`section_id`)
-    REFERENCES `tsinghuadaily`.`section` (`section_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE `tsinghuadaily`.`article` (
   `article_id` INT NOT NULL AUTO_INCREMENT,
   `section_id` INT NOT NULL,
@@ -201,6 +183,27 @@ ADD COLUMN `id_num` VARCHAR(20) NULL AFTER `id_card`;
 ALTER TABLE `tsinghuadaily`.`authrequest` 
 CHANGE COLUMN `type` `user_type` VARCHAR(20) NULL DEFAULT NULL ;
 
+ALTER TABLE `tsinghuadaily`.`section` 
+ADD COLUMN `follower_cnt` INT ZEROFILL NULL AFTER `category`,
+ADD COLUMN `article_cnt` INT ZEROFILL NULL AFTER `follower_cnt`;
+
+ALTER TABLE `tsinghuadaily`.`article` 
+ADD COLUMN `category` VARCHAR(10) NOT NULL DEFAULT 'Campus' AFTER `reader`;
+
+ALTER TABLE `tsinghuadaily`.`article` 
+ADD COLUMN `fav_num` INT ZEROFILL NULL AFTER `category`;
+
+ALTER TABLE `tsinghuadaily`.`comment` 
+ADD COLUMN `add_time` DATETIME NOT NULL AFTER `content`;
+
+ALTER TABLE `tsinghuadaily`.`article` 
+CHANGE COLUMN `reader` `reader` VARCHAR(15) NOT NULL DEFAULT 'All' ,
+CHANGE COLUMN `category` `category` VARCHAR(15) NOT NULL DEFAULT 'Campus' ;
+
+ALTER TABLE `tsinghuadaily`.`section` 
+CHANGE COLUMN `follower_cnt` `follower_cnt` INT(10) UNSIGNED ZEROFILL NULL DEFAULT 0 ,
+CHANGE COLUMN `article_cnt` `article_cnt` INT(10) UNSIGNED ZEROFILL NULL DEFAULT 0 ;
+
 INSERT INTO `tsinghuadaily`.`section`
 (`section_name`,
 `category`)
@@ -224,21 +227,4 @@ VALUES
 1,
 '软件学院',
 'Staff');
-
-ALTER TABLE `tsinghuadaily`.`section` 
-ADD COLUMN `follower_cnt` INT ZEROFILL NULL AFTER `category`,
-ADD COLUMN `article_cnt` INT ZEROFILL NULL AFTER `follower_cnt`;
-
-ALTER TABLE `tsinghuadaily`.`article` 
-ADD COLUMN `category` VARCHAR(10) NOT NULL DEFAULT 'Campus' AFTER `reader`;
-
-ALTER TABLE `tsinghuadaily`.`article` 
-ADD COLUMN `fav_num` INT ZEROFILL NULL AFTER `category`;
-
-ALTER TABLE `tsinghuadaily`.`comment` 
-ADD COLUMN `add_time` DATETIME NOT NULL AFTER `content`;
-
-ALTER TABLE `tsinghuadaily`.`article` 
-CHANGE COLUMN `reader` `reader` VARCHAR(15) NOT NULL DEFAULT 'All' ,
-CHANGE COLUMN `category` `category` VARCHAR(15) NOT NULL DEFAULT 'Campus' ;
 

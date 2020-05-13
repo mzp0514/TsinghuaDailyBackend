@@ -22,5 +22,6 @@ public interface UserDao {
 
 	void updateInfo(int user_id, String avatar, String status);
 
-	void updateInfoAuth(int user_id, Boolean verified, String dept_name, String user_type, String id_num);
+	void updateInfoAuth(int user_id, Boolean verified, String dept_name,
+	                    String user_type, String id_num, int section_id);
 }

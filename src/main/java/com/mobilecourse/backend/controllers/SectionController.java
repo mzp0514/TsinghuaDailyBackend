@@ -31,7 +31,7 @@ public class SectionController extends CommonController {
 	private FollowDao followMapper;
 
 	@RequestMapping(value = "/get-sections", method = { RequestMethod.GET })
-	public String getCategorySections(@RequestParam(value = "category") String category,
+	public String getCategorySections(@RequestParam(value = "category", defaultValue = "") String category,
 	                                  HttpServletRequest request) {
 		ArrayList<Section> sections = null;
 		if(category.equals("Follow")){
@@ -88,9 +88,7 @@ public class SectionController extends CommonController {
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("followed", followed);
-		wrapperMsg.put("category", s.getCategory());
-		wrapperMsg.put("section_id", s.getSection_id());
-		wrapperMsg.put("section_name", s.getSection_name());
+		wrapperMsg.put("info", JSONObject.fromObject(s));
 		return wrapperMsg.toString();
 	}
 

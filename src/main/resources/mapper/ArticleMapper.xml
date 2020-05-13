@@ -5,14 +5,39 @@
     <select id="selectBySectionId" resultType="com.mobilecourse.backend.model.Article">
         SELECT *
         FROM article
-        WHERE section_id = #{section_id}
+        WHERE section_id = #{section_id} AND
+        (
+            (reader='All')
+            OR (reader='Staff' AND #{is_staff}=1)
+            OR (reader='Member' AND section_id=#{self_section_id})
+            OR (reader='MemberStaff' AND #{is_staff}=1 AND section_id=#{self_section_id})
+        )
     </select>
 
     <select id="selectByCategory" resultType="com.mobilecourse.backend.model.Article">
         SELECT *
         FROM article
-        WHERE category = #{category}
+        <where>
+            <if test="category=='Favourite'">
+                article_id IN (SELECT article_id FROM favourite  WHERE user_id=#{user_id})
+            </if>
+            <if test="category=='Follow'">
+                AND section_id IN (SELECT section_id FROM follow WHERE user_id=#{user_id})
+            </if>
+            <if test="category=='Campus' or category=='Faculty' or category=='Club'">
+                AND category = #{category}
+            </if>
+            AND
+            (
+                (reader='All')
+                OR (reader='Staff' AND #{is_staff}=1)
+                OR (reader='Member' AND section_id=#{section_id})
+                OR (reader='MemberStaff' AND #{is_staff}=1 AND section_id=#{section_id})
+            )
+        </where>
+
     </select>
+
 
     <select id="getById" resultType="com.mobilecourse.backend.model.Article">
         SELECT *

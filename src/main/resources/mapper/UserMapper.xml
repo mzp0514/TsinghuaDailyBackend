@@ -56,7 +56,8 @@
         SET verified = #{verified},
             dept_name = #{dept_name},
             user_type = #{user_type},
-            id_num = #{id_num}
+            id_num = #{id_num},
+            section_id = #{section_id}
         WHERE user_id = #{user_id};
     </update>
 

@@ -1,10 +1,11 @@
 package com.mobilecourse.backend.controllers;
 
 
-import com.alibaba.fastjson.JSONObject;
+
 import com.mobilecourse.backend.WebSocketServer;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.User;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -60,48 +61,29 @@ public class UserController extends CommonController {
 		return wrapperMsg(200, "logout success");
 	}
 
-	@RequestMapping(value = "/get-self-info", method = { RequestMethod.GET })
-	public String getSelfInfo(HttpServletRequest request) {
-		User u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
-		JSONObject wrapperMsg = new JSONObject();
-		wrapperMsg.put("code", 200);
-		wrapperMsg.put("avatar", u.getAvatar());
-		wrapperMsg.put("status", u.getStatus());
-		wrapperMsg.put("verified", u.getVerified());
-		wrapperMsg.put("dept_name", u.getDept_name());
-		wrapperMsg.put("user_type", u.getType());
-		if(u.getAdmin()){
-			wrapperMsg.put("section_id", u.getSection_id());
-		}
-		else{
-			wrapperMsg.put("id_num", u.getId_num());
-		}
-		return wrapperMsg.toJSONString();
-	}
 
 	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })
-	public String getInfo(@RequestParam(value = "id_num")String id_num,
+	public String getInfo(@RequestParam(value = "id_num", defaultValue = "self")String id_num,
 	                      HttpServletRequest request) {
-		try {
-			User u = userMapper.getByIdNum(id_num);
-			JSONObject wrapperMsg = new JSONObject();
-			wrapperMsg.put("code", 200);
-			wrapperMsg.put("avatar", u.getAvatar());
-			wrapperMsg.put("status", u.getStatus());
-			wrapperMsg.put("verified", u.getVerified());
-			if(u.getAdmin()){
-				wrapperMsg.put("section_id", u.getSection_id());
-			}
-			else{
-				wrapperMsg.put("dept_name", u.getDept_name());
-				wrapperMsg.put("id_num", u.getId_num());
-				wrapperMsg.put("user_type", u.getType());
-			}
-			return wrapperMsg.toJSONString();
+		User u = null;
+
+		if(id_num.equals("self")){
+			u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
 		}
-		catch (Exception e){
-			return wrapperMsg(404, "user not exist");
+		else {
+			try {
+				u = userMapper.getByIdNum(id_num);
+			} catch (Exception e){
+				return wrapperMsg(404, "user not exist");
+			}
+
 		}
+		JSONObject userinfo = JSONObject.fromObject(u);
+		userinfo.remove("password");
+		JSONObject wrapperMsg = new JSONObject();
+		wrapperMsg.put("code", 200);
+		wrapperMsg.put("info", userinfo);
+		return wrapperMsg.toString();
 	}
 
 	@RequestMapping(value = "/modify-info", method = { RequestMethod.POST })

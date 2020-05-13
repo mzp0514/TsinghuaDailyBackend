@@ -1,11 +1,9 @@
 package com.mobilecourse.backend.controllers;
 
 import com.mobilecourse.backend.dao.AuthRequestDao;
-import com.mobilecourse.backend.dao.MemberDao;
 import com.mobilecourse.backend.dao.SectionDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.AuthRequest;
-import com.mobilecourse.backend.model.Member;
 import com.mobilecourse.backend.model.User;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +24,14 @@ import net.sf.json.JSONArray;
 public class AuthRequestController extends CommonController {
 
 	@Autowired
-	private AuthRequestDao AuthRequestMapper;
+	private AuthRequestDao authRequestMapper;
 
 	@Autowired
-	private UserDao UserMapper;
+	private UserDao userMapper;
 
 	@Autowired
-	private SectionDao SectionMapper;
+	private SectionDao sectionMapper;
 
-	@Autowired
-	private MemberDao MemberMapper;
 
 	@RequestMapping(value = "/request", method = { RequestMethod.POST })
 	public String request(@RequestParam(value = "id_num")String id_num,
@@ -48,17 +44,17 @@ public class AuthRequestController extends CommonController {
 		rq.setId_card(id_card);
 		rq.setType(user_type);
 		rq.setId_num(id_num);
-		User receiver = UserMapper.getBySectionId(SectionMapper.getBySectionName(dept_name).getSection_id());
+		User receiver = userMapper.getBySectionId(sectionMapper.getBySectionName(dept_name).getSection_id());
 		rq.setReceiver_id(receiver.getUser_id());
 		rq.setSender_id((Integer) request.getSession().getAttribute("user_id"));
-		AuthRequestMapper.insert(rq);
+		authRequestMapper.insert(rq);
 		return wrapperMsg(200, "success");
 	}
 
 	@RequestMapping(value = "/get-requests", method = { RequestMethod.GET })
 	public String get(HttpServletRequest request) {
 		int uid = (Integer) request.getSession().getAttribute("user_id");
-		List<AuthRequest> requests = AuthRequestMapper.get(uid);
+		List<AuthRequest> requests = authRequestMapper.get(uid);
 		JSONArray js = JSONArray.fromObject(requests);
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
@@ -69,14 +65,12 @@ public class AuthRequestController extends CommonController {
 	@RequestMapping(value = "/approve", method = { RequestMethod.POST })
 	public String approve(@RequestParam(value = "request_id")int request_id,
 	                      HttpServletRequest request) {
-		AuthRequest rq = AuthRequestMapper.getById(request_id);
-		UserMapper.updateInfoAuth(rq.getSender_id(), true, rq.getDept_name(),
-										rq.getType(), rq.getId_num());
-		AuthRequestMapper.delete(request_id);
-		Member m = new Member();
-		m.setSection_id(SectionMapper.getBySectionName(rq.getDept_name()).getSection_id());
-		m.setUser_id(rq.getSender_id());
-		MemberMapper.insert(m);
+		AuthRequest rq = authRequestMapper.getById(request_id);
+		int section_id = sectionMapper.getBySectionName(rq.getDept_name()).getSection_id();
+		userMapper.updateInfoAuth(rq.getSender_id(), true, rq.getDept_name(),
+										rq.getType(), rq.getId_num(), section_id);
+		authRequestMapper.delete(request_id);
+		
 		return wrapperMsg(200, "success");
 	}
 }
