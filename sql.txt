@@ -228,3 +228,4 @@ VALUES
 '软件学院',
 'Staff');
 
+CREATE FULLTEXT INDEX ft_index ON `tsinghuadaily`.`article` (`title`,`content`) WITH PARSER ngram;
