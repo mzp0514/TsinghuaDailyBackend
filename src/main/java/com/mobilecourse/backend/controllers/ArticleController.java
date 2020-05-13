@@ -65,11 +65,32 @@ public class ArticleController extends CommonController {
 	                          HttpServletRequest request) {
 		int uid = (int) request.getSession().getAttribute("user_id");
 		User u = userMapper.getById(uid);
-		System.out.println(page_num);
+
 		PageHelper.startPage(page_num, page_size, "article_id desc");
 		List<Article> articles = articleMapper.selectBySectionId(section_id, u.getSection_id(),
 																u.getType().equals("Staff"));
-		System.out.println(articles.toString());
+		PageInfo pageInfo = new PageInfo(articles);
+		JSONArray js = JSONArray.fromObject(pageInfo.getList());
+		for(int i = 0; i < js.size(); i++){
+			js.getJSONObject(i).discard("content");
+		}
+		JSONObject wrapperMsg = new JSONObject();
+		wrapperMsg.put("code", 200);
+		wrapperMsg.put("articles", js);
+		return wrapperMsg.toString();
+	}
+
+	@RequestMapping(value = "/search", method = { RequestMethod.POST })
+	public String search(@RequestParam(value = "query") String query,
+	                     @RequestParam(value = "page_num") int page_num,
+	                     @RequestParam(value = "page_size", defaultValue = "10") int page_size,
+	                                 HttpServletRequest request) {
+		int uid = (int) request.getSession().getAttribute("user_id");
+		User u = userMapper.getById(uid);
+
+		PageHelper.startPage(page_num, page_size);
+		List<Article> articles = articleMapper.search(query, u.getSection_id(),
+				u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
 		JSONArray js = JSONArray.fromObject(pageInfo.getList());
 		for(int i = 0; i < js.size(); i++){
@@ -164,5 +185,7 @@ public class ArticleController extends CommonController {
 		articleMapper.updateFavCnt(article_id, -1);
 		return wrapperMsg(200, "success");
 	}
+
+
 
 }
