@@ -91,7 +91,7 @@ public class TestController extends CommonController {
     @RequestMapping("/sendSocketMsg/{msg}")
     public String sendSocketMsg(@PathVariable String msg) {
         try {
-            Hashtable<String, WebSocketServer> webSockets = WebSocketServer.getWebSocketTable();
+            Hashtable<Integer, WebSocketServer> webSockets = WebSocketServer.getWebSocketTable();
             for (WebSocketServer socketServer : webSockets.values()) {
                 socketServer.sendMessage(msg);
             }
