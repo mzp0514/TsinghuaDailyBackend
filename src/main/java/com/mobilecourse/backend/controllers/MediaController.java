@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.FileNameMap;
+import java.net.HttpURLConnection;
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
@@ -22,6 +27,7 @@ public class MediaController extends CommonController {
 	private String getFileType(String filename){
 		return filename.substring(filename.lastIndexOf(".") + 1);
 	}
+
 
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
 	public String upload(@RequestParam(value = "file") MultipartFile file,
@@ -48,7 +54,7 @@ public class MediaController extends CommonController {
 
 	}
 
-	@RequestMapping(value = "/get-image",method = RequestMethod.GET)
+	@RequestMapping(value = "/get",method = RequestMethod.GET)
 	@ResponseBody
 	public HttpServletResponse getImage(@RequestParam(value = "filename") String filename,
 	                                    HttpServletRequest request, HttpServletResponse response) {
@@ -58,12 +64,14 @@ public class MediaController extends CommonController {
 			String url= "./media" + sep + username + sep + filename;
 			File file = new File(url);
 			FileInputStream fis = new FileInputStream(file);
-			//response.setContentType("multipart/form-data"); //设置返回的文件类型
-			response.setContentType("image/" + getFileType(filename));
-			response.setHeader("Access-Control-Allow-Origin", "*");//设置该图片允许跨域访问
-			IOUtils.copy(fis, response.getOutputStream());
-			// response.addHeader("Content-Length", "" + file.length());
-			return response;
+			response.setContentType(URLConnection.guessContentTypeFromName(filename));
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.addHeader("Content-Length", "" + file.length());
+			OutputStream out = response.getOutputStream();
+			IOUtils.copy(fis, out);
+			out.flush();
+			fis.close();
+			return null;
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			return null;
