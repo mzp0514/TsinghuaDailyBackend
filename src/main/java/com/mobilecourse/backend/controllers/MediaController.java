@@ -38,8 +38,8 @@ public class MediaController extends CommonController {
 
 			String filename = System.currentTimeMillis() + "." + getFileType(file.getOriginalFilename());
 			String sep = System.getProperty("file.separator");
-			String username = (String) request.getSession().getAttribute("username");
-			String path = "./media" + sep + username;
+			String uid = (String) request.getSession().getAttribute("user_id");
+			String path = "./media" + sep + uid;
 			File f = new File(path);
 			if (!f.exists() && !f.isDirectory()) {
 				f.mkdirs();
@@ -60,8 +60,8 @@ public class MediaController extends CommonController {
 	                                    HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String sep = System.getProperty("file.separator");
-			String username = (String) request.getSession().getAttribute("username");
-			String url= "./media" + sep + username + sep + filename;
+			String uid = (String) request.getSession().getAttribute("user_id");
+			String url= "./media" + sep + uid + sep + filename;
 			File file = new File(url);
 			FileInputStream fis = new FileInputStream(file);
 			response.setContentType(URLConnection.guessContentTypeFromName(filename));
