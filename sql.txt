@@ -28,7 +28,7 @@ DEFAULT CHARACTER SET = utf8;
 
 ALTER TABLE `tsinghuadaily`.`user` 
 ADD INDEX `section_id_idx` (`section_id` ASC) VISIBLE;
-;
+
 ALTER TABLE `tsinghuadaily`.`user` 
 ADD CONSTRAINT `section_id`
   FOREIGN KEY (`section_id`)
@@ -169,7 +169,7 @@ CHANGE COLUMN `admin` `admin` TINYINT(3) UNSIGNED ZEROFILL NOT NULL DEFAULT 0 ;
 
 ALTER TABLE `tsinghuadaily`.`user` 
 ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
-;
+
 
 ALTER TABLE `tsinghuadaily`.`authrequest` 
 DROP COLUMN `class_id`;
