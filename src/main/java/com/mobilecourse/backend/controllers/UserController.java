@@ -47,7 +47,11 @@ public class UserController extends CommonController {
 		}
 		else if(u.getPassword().equals(password)){
 			putInfoToSession(request, "user_id", u.getUser_id());
-			return wrapperMsg(200, "login success");
+			JSONObject wrapperMsg = new JSONObject();
+			wrapperMsg.put("code", 200);
+			wrapperMsg.put("user_id", u.getUser_id());
+			return wrapperMsg.toString();
+
 		}
 		else{
 			return wrapperMsg(404, "wrong password");

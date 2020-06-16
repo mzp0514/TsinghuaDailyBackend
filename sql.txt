@@ -228,4 +228,198 @@ VALUES
 '软件学院',
 'Staff');
 
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('经管学院',
+ 'Faculty');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('sem',
+'sem',
+1,
+1,
+2,
+'经管学院',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('电子工程系',
+ 'Faculty');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('ee',
+'ee',
+1,
+1,
+3,
+'电子工程系',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('计算机系',
+ 'Faculty');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('cs',
+'cs',
+1,
+1,
+4,
+'计算机系',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('自动化系',
+ 'Faculty');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('da',
+'da',
+1,
+1,
+5,
+'自动化系',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('校长办公室',
+ 'Campus');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('xzbgs_thu',
+'xzbgs_thu',
+1,
+1,
+6,
+'校长办公室',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('教务处',
+ 'Campus');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('jwc_thu',
+'jwc_thu',
+1,
+1,
+7,
+'教务处',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('围棋社',
+ 'Club');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('wqs_club',
+'wqs_club',
+1,
+1,
+8,
+'围棋社',
+'Staff');
+
+INSERT INTO `tsinghuadaily`.`section`
+(`section_name`,
+`category`)
+VALUES
+('桥牌社',
+ 'Club');
+
+ INSERT INTO `tsinghuadaily`.`user`
+(`username`,
+`password`,
+`verified`,
+`admin`,
+`section_id`,
+`dept_name`,
+`user_type`)
+VALUES
+('qps_club',
+'qps_club',
+1,
+1,
+9,
+'桥牌社',
+'Staff');
+
+
+
 CREATE FULLTEXT INDEX ft_index ON `tsinghuadaily`.`article` (`title`,`content`) WITH PARSER ngram;
