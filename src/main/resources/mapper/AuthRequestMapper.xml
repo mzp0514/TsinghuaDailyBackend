@@ -16,18 +16,18 @@
 
     <select id="get" resultType="com.mobilecourse.backend.model.AuthRequest">
         SELECT *
-        FROM AuthRequest
+        FROM authrequest
         WHERE receiver_id = #{receiver_id}
     </select>
 
     <select id="getById" resultType="com.mobilecourse.backend.model.AuthRequest">
         SELECT *
-        FROM AuthRequest
+        FROM authrequest
         WHERE request_id = #{request_id}
     </select>
 
     <delete id="delete">
-        DELETE FROM AuthRequest
+        DELETE FROM authrequest
         WHERE request_id=#{request_id}
     </delete>
 

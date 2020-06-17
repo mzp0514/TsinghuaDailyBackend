@@ -5,7 +5,9 @@ package com.mobilecourse.backend.controllers;
 import com.mobilecourse.backend.WebSocketServer;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.User;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -82,12 +84,13 @@ public class UserController extends CommonController {
 			}
 
 		}
-		JSONObject userinfo = JSONObject.fromObject(u);
+
+		JSONObject userinfo = JSONObject.parseObject(JSON.toJSONString(u));
 		userinfo.remove("password");
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("info", userinfo);
-		return wrapperMsg.toString();
+		return wrapperMsg.toJSONString();
 	}
 
 	@RequestMapping(value = "/modify-info", method = { RequestMethod.POST })

@@ -9,4 +9,6 @@ public interface MessageDao {
 	void insert(Message m);
 
 	List<Message> select(int user_id);
+
+	void delete(int user_id);
 }

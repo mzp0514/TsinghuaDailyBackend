@@ -1,11 +1,13 @@
 package com.mobilecourse.backend.controllers;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.dao.AuthRequestDao;
 import com.mobilecourse.backend.dao.SectionDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.model.AuthRequest;
 import com.mobilecourse.backend.model.User;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import net.sf.json.JSONArray;
+
 
 @RestController
 @EnableAutoConfiguration
@@ -55,11 +57,11 @@ public class AuthRequestController extends CommonController {
 	public String get(HttpServletRequest request) {
 		int uid = (Integer) request.getSession().getAttribute("user_id");
 		List<AuthRequest> requests = authRequestMapper.get(uid);
-		JSONArray js = JSONArray.fromObject(requests);
+		JSONArray req = JSONArray.parseArray(JSON.toJSONString(requests));
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
-		wrapperMsg.put("requests", js);
-		return wrapperMsg.toString();
+		wrapperMsg.put("requests", req);
+		return wrapperMsg.toJSONString();
 	}
 
 	@RequestMapping(value = "/approve", method = { RequestMethod.POST })

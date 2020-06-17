@@ -45,7 +45,7 @@ public class MediaController extends CommonController {
 				f.mkdirs();
 			}
 			file.transferTo(Paths.get(path + sep + filename));
-			return wrapperMsg(200, filename);
+			return wrapperMsg(200, "uid="+uid+"&filename="+filename);
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -56,11 +56,11 @@ public class MediaController extends CommonController {
 
 	@RequestMapping(value = "/get",method = RequestMethod.GET)
 	@ResponseBody
-	public HttpServletResponse getImage(@RequestParam(value = "filename") String filename,
+	public HttpServletResponse getImage(@RequestParam(value = "uid") int uid,
+										@RequestParam(value = "filename") String filename,
 	                                    HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String sep = System.getProperty("file.separator");
-			int uid = (int) request.getSession().getAttribute("user_id");
 			String url= "./media" + sep + uid + sep + filename;
 			File file = new File(url);
 			FileInputStream fis = new FileInputStream(file);

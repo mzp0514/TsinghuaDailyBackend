@@ -423,3 +423,8 @@ VALUES
 
 
 CREATE FULLTEXT INDEX ft_index ON `tsinghuadaily`.`article` (`title`,`content`) WITH PARSER ngram;
+
+ALTER TABLE `tsinghuadaily`.`message` 
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`receiver_id`, `sender_id`, `send_time`);
+;

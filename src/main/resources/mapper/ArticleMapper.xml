@@ -46,7 +46,7 @@
     </select>
 
     <insert id="insert"  keyProperty="article_id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.Article">
-        INSERT INTO Article
+        INSERT INTO article
         <trim prefix="(" suffix=")" suffixOverrides="," >
             section_id, title, author_name, publish_time, content, reader, category, view_num, fav_num
         </trim>

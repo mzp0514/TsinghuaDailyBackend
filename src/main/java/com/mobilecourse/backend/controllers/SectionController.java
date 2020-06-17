@@ -1,12 +1,14 @@
 package com.mobilecourse.backend.controllers;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.dao.FollowDao;
 import com.mobilecourse.backend.dao.SectionDao;
 
 import com.mobilecourse.backend.model.Follow;
 import com.mobilecourse.backend.model.Section;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-
-import net.sf.json.JSONArray;
 
 @RestController
 @EnableAutoConfiguration
@@ -45,11 +45,11 @@ public class SectionController extends CommonController {
 			sections = (ArrayList<Section>) sectionMapper.selectByCategory(category);
 		}
 
-		JSONArray js = JSONArray.fromObject(sections);
+		JSONArray sec = JSONArray.parseArray(JSON.toJSONString(sections));
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
-		wrapperMsg.put("sections", js);
-		return wrapperMsg.toString();
+		wrapperMsg.put("sections", sec);
+		return wrapperMsg.toJSONString();
 	}
 
 
@@ -88,8 +88,8 @@ public class SectionController extends CommonController {
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("followed", followed);
-		wrapperMsg.put("info", JSONObject.fromObject(s));
-		return wrapperMsg.toString();
+		wrapperMsg.put("info", JSON.toJSON(s));
+		return wrapperMsg.toJSONString();
 	}
 
 }

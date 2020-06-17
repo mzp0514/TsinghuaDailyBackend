@@ -3,8 +3,9 @@ package com.mobilecourse.backend.controllers;
 import com.mobilecourse.backend.dao.*;
 import com.mobilecourse.backend.model.*;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -67,7 +68,7 @@ public class CommentController extends CommonController {
 	public String getComments(@RequestParam(value = "article_id") int article_id,
 	                  HttpServletRequest request) {
 		List<Comment> comments = commentMapper.select(article_id);
-		JSONArray cmt = JSONArray.fromObject(comments);
+		JSONArray cmt = JSONArray.parseArray(JSON.toJSONString(comments));
 		for(int i = 0; i < comments.size(); i++){
 			User u = userMapper.getById(comments.get(i).getUser_id());
 			JSONObject obj = cmt.getJSONObject(i);
@@ -77,7 +78,7 @@ public class CommentController extends CommonController {
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("comments", cmt);
-		return wrapperMsg.toString();
+		return wrapperMsg.toJSONString();
 	}
 
 

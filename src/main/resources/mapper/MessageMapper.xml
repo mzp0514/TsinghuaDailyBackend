@@ -4,7 +4,7 @@
 <mapper namespace="com.mobilecourse.backend.dao.MessageDao">
 
     <insert id="insert" parameterType="com.mobilecourse.backend.model.Message">
-        INSERT INTO Message
+        INSERT INTO message
         <trim prefix="(" suffix=")" suffixOverrides="," >
             sender_id, receiver_id, send_time, content
         </trim>
@@ -18,5 +18,11 @@
         FROM message
         WHERE receiver_id = #{user_id}
     </select>
+
+    <delete id="delete" >
+        DELETE
+        FROM message
+        WHERE receiver_id = #{user_id}
+    </delete>
 
 </mapper>

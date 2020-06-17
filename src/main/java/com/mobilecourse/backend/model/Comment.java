@@ -1,5 +1,7 @@
 package com.mobilecourse.backend.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.sql.Timestamp;
 
 public class Comment {
@@ -7,6 +9,7 @@ public class Comment {
 	private int comment_id;
 	private int user_id;
 	private String content;
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Timestamp add_time;
 
 	public int getArticle_id() {

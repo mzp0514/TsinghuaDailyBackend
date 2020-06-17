@@ -1,10 +1,14 @@
 package com.mobilecourse.backend.controllers;
 
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mobilecourse.backend.dao.*;
 import com.mobilecourse.backend.model.*;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +20,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import net.sf.json.JSONArray;
 
 @RestController
 @EnableAutoConfiguration
@@ -48,14 +51,14 @@ public class ArticleController extends CommonController {
 		List<Article> articles = articleMapper.selectByCategory(category, uid,
 				u.getSection_id(), u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
-		JSONArray js = JSONArray.fromObject(pageInfo.getList());
+		JSONArray js = JSONArray.parseArray(JSON.toJSONString(pageInfo.getList()));
 		for(int i = 0; i < js.size(); i++){
-			js.getJSONObject(i).discard("content");
+			js.getJSONObject(i).remove("content");
 		}
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("articles", js);
-		return wrapperMsg.toString();
+		return wrapperMsg.toJSONString();
 	}
 
 	@RequestMapping(value = "/section-articles", method = { RequestMethod.GET })
@@ -70,14 +73,14 @@ public class ArticleController extends CommonController {
 		List<Article> articles = articleMapper.selectBySectionId(section_id, u.getSection_id(),
 																u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
-		JSONArray js = JSONArray.fromObject(pageInfo.getList());
+		JSONArray js = JSONArray.parseArray(JSON.toJSONString(pageInfo.getList()));
 		for(int i = 0; i < js.size(); i++){
-			js.getJSONObject(i).discard("content");
+			js.getJSONObject(i).remove("content");
 		}
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("articles", js);
-		return wrapperMsg.toString();
+		return wrapperMsg.toJSONString();
 	}
 
 	@RequestMapping(value = "/search", method = { RequestMethod.POST })
@@ -92,14 +95,14 @@ public class ArticleController extends CommonController {
 		List<Article> articles = articleMapper.search(query, u.getSection_id(),
 				u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
-		JSONArray js = JSONArray.fromObject(pageInfo.getList());
+		JSONArray js = JSONArray.parseArray(JSON.toJSONString(pageInfo.getList()));
 		for(int i = 0; i < js.size(); i++){
-			js.getJSONObject(i).discard("content");
+			js.getJSONObject(i).remove("content");
 		}
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("articles", js);
-		return wrapperMsg.toString();
+		return wrapperMsg.toJSONString();
 	}
 
 	@RequestMapping(value = "/article", method = { RequestMethod.GET })
@@ -116,9 +119,9 @@ public class ArticleController extends CommonController {
 
 			JSONObject wrapperMsg = new JSONObject();
 			wrapperMsg.put("code", 200);
-			wrapperMsg.put("info", JSONObject.fromObject(a));
+			wrapperMsg.put("info", JSONObject.parseObject(JSON.toJSONString(a)));
 			wrapperMsg.put("favoured", fav);
-			return wrapperMsg.toString();
+			return wrapperMsg.toJSONString();
 		}
 		catch (Exception e){
 			return wrapperMsg(404, "article not found");

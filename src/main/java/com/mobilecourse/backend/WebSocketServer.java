@@ -1,12 +1,8 @@
 package com.mobilecourse.backend;
 
 import com.mobilecourse.backend.controllers.MessageController;
-import com.mobilecourse.backend.dao.MessageDao;
-import com.mobilecourse.backend.model.Message;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
@@ -15,7 +11,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Hashtable;
-import java.util.List;
+
 
 @Controller
 @ServerEndpoint("/websocket/{uid}")
@@ -49,10 +45,9 @@ public class WebSocketServer {
         this.uid = uid;
         webSocketTable.put(uid, this);
         System.out.println(uid + "成功连接websocket");
-        this.sendMessage("连接成功");
         String messages = messageController.getMessages(uid);
-
         this.sendMessage(messages);
+        messageController.deleteMessage(uid);
     }
 
     // 在关闭连接时移除对应连接
@@ -64,7 +59,7 @@ public class WebSocketServer {
     // 收到消息时候的处理
     @OnMessage
     public void onMessage(String message, Session session) {
-        JSONObject jsonTo = JSONObject.fromObject(message);
+        JSONObject jsonTo = JSONObject.parseObject(message);
         String mes = (String) jsonTo.get("content");
         sendMessageTo(mes, (Integer) jsonTo.get("to"));
         System.out.println(message);
@@ -91,7 +86,7 @@ public class WebSocketServer {
             msg.put("sender_id", uid);
             msg.put("send_time", Timestamp.valueOf(LocalDateTime.now()));
             msg.put("content", message);
-            toS.sendMessage(msg.toString());
+            toS.sendMessage(msg.toJSONString());
         }
     }
 }

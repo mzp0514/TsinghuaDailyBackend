@@ -5,8 +5,11 @@ import com.mobilecourse.backend.dao.CommentDao;
 import com.mobilecourse.backend.dao.MessageDao;
 import com.mobilecourse.backend.model.Comment;
 import com.mobilecourse.backend.model.Message;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -35,11 +38,11 @@ public class MessageController extends CommonController {
 	public String getMessages(int uid) {
 
 		List<Message> messages = messageMapper.select(uid);
-		JSONArray msg = JSONArray.fromObject(messages);
+		JSONArray msg = JSONArray.parseArray(JSON.toJSONString(messages));
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
 		wrapperMsg.put("messages", msg);
-		return wrapperMsg.toString();
+		return wrapperMsg.toJSONString();
 	}
 
 
@@ -53,6 +56,11 @@ public class MessageController extends CommonController {
 		messageMapper.insert(m);
 
 		return wrapperMsg(200, "success");
+	}
+
+	public void deleteMessage(int uid) {
+
+		messageMapper.delete(uid);
 	}
 
 }

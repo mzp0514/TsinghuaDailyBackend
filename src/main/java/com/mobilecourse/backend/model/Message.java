@@ -1,9 +1,13 @@
 package com.mobilecourse.backend.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.sql.Timestamp;
 public class Message {
 	private int sender_id;
 	private int receiver_id;
+
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Timestamp send_time;
 	private String content;
 

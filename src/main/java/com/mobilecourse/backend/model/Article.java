@@ -1,5 +1,7 @@
 package com.mobilecourse.backend.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.sql.Timestamp;
 
 public class Article implements Comparable<Article> {
@@ -7,6 +9,7 @@ public class Article implements Comparable<Article> {
 	private int section_id;
 	private String title;
 	private String author_name;
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Timestamp publish_time;
 	private String content;
 	private int view_num;
