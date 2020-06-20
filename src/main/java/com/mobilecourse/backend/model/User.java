@@ -6,7 +6,7 @@ public class User {
 	private String password;
 	private String avatar;
 	private String status;
-	private Boolean verified;
+	private int verified;
 	private Boolean admin;
 	private String dept_name;
 	private String user_type; //('Undergraduate', 'Graduate', 'Staff'))
@@ -53,11 +53,11 @@ public class User {
 		this.status = status;
 	}
 
-	public Boolean getVerified() {
+	public int getVerified() {
 		return verified;
 	}
 
-	public void setVerified(Boolean verified) {
+	public void setVerified(int verified) {
 		this.verified = verified;
 	}
 

@@ -111,6 +111,9 @@ public class ArticleController extends CommonController {
 		try {
 			int uid = (int) request.getSession().getAttribute("user_id");
 			Article a = articleMapper.getById(article_id);
+			if(a == null){
+				return wrapperMsg(404, "article not exist");
+			}
 
 			articleMapper.updateViewCnt(article_id, 1);
 
@@ -161,7 +164,13 @@ public class ArticleController extends CommonController {
 		if(!u.getAdmin()){
 			return wrapperMsg(404, "no authority");
 		}
-		articleMapper.delete(article_id);
+		try {
+			articleMapper.delete(article_id);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "article not exist");
+		}
 		return wrapperMsg(200, "success");
 	}
 

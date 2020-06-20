@@ -9,6 +9,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Hashtable;
 
@@ -62,6 +63,7 @@ public class WebSocketServer {
         JSONObject jsonTo = JSONObject.parseObject(message);
         String mes = (String) jsonTo.get("content");
         sendMessageTo(mes, (Integer) jsonTo.get("to"));
+
         System.out.println(message);
     }
 
@@ -78,15 +80,22 @@ public class WebSocketServer {
 
     public void sendMessageTo(String message, int to) {
         WebSocketServer toS = webSocketTable.get(to);
+        JSONObject msg = new JSONObject();
+        msg.put("sender_id", uid);
+        msg.put("to", to);
+        msg.put("send_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(
+                Timestamp.valueOf(LocalDateTime.now())));
+
+        msg.put("content", message);
+        String s = msg.toJSONString();
         if(toS == null){
             messageController.addMessage(message, to, uid);
         }
         else{
-            JSONObject msg = new JSONObject();
-            msg.put("sender_id", uid);
-            msg.put("send_time", Timestamp.valueOf(LocalDateTime.now()));
-            msg.put("content", message);
-            toS.sendMessage(msg.toJSONString());
+            toS.sendMessage(s);
         }
+
+        sendMessage(s);
+        System.out.println(s);
     }
 }

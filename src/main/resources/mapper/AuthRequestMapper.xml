@@ -7,10 +7,10 @@
             parameterType="com.mobilecourse.backend.model.AuthRequest">
         INSERT INTO authrequest
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            sender_id, receiver_id, dept_name, id_num, user_type, id_card
+            sender_id, receiver_id, dept_name, id_num, user_type, id_card, username
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            #{sender_id}, #{receiver_id}, #{dept_name}, #{id_num}, #{user_type}, #{id_card}
+            #{sender_id}, #{receiver_id}, #{dept_name}, #{id_num}, #{user_type}, #{id_card}, #{username}
         </trim>;
     </insert>
 

@@ -41,15 +41,18 @@ public class AuthRequestController extends CommonController {
 	                      @RequestParam(value = "user_type")String user_type,
 	                      @RequestParam(value = "id_card")String id_card,
 	                      HttpServletRequest request) {
+		int uid = (Integer) request.getSession().getAttribute("user_id");
 		AuthRequest rq = new AuthRequest();
 		rq.setDept_name(dept_name);
 		rq.setId_card(id_card);
 		rq.setType(user_type);
 		rq.setId_num(id_num);
-		User receiver = userMapper.getBySectionId(sectionMapper.getBySectionName(dept_name).getSection_id());
+		rq.setUsername(userMapper.getById(uid).getUsername());
+		User receiver = userMapper.getAdminBySectionId(sectionMapper.getBySectionName(dept_name).getSection_id());
 		rq.setReceiver_id(receiver.getUser_id());
-		rq.setSender_id((Integer) request.getSession().getAttribute("user_id"));
+		rq.setSender_id(uid);
 		authRequestMapper.insert(rq);
+		userMapper.updateAuthStatus(uid, 1);
 		return wrapperMsg(200, "success");
 	}
 
@@ -69,10 +72,19 @@ public class AuthRequestController extends CommonController {
 	                      HttpServletRequest request) {
 		AuthRequest rq = authRequestMapper.getById(request_id);
 		int section_id = sectionMapper.getBySectionName(rq.getDept_name()).getSection_id();
-		userMapper.updateInfoAuth(rq.getSender_id(), true, rq.getDept_name(),
+		userMapper.updateInfoAuth(rq.getSender_id(), 2, rq.getDept_name(),
 										rq.getType(), rq.getId_num(), section_id);
 		authRequestMapper.delete(request_id);
 		
+		return wrapperMsg(200, "success");
+	}
+
+	@RequestMapping(value = "/refuse", method = { RequestMethod.POST })
+	public String refuse(@RequestParam(value = "request_id")int request_id,
+	                      HttpServletRequest request) {
+		AuthRequest rq = authRequestMapper.getById(request_id);
+		authRequestMapper.delete(request_id);
+		userMapper.updateAuthStatus(rq.getSender_id(), 3);
 		return wrapperMsg(200, "success");
 	}
 }

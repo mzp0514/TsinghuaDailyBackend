@@ -51,14 +51,12 @@ public class UserController extends CommonController {
 			putInfoToSession(request, "user_id", u.getUser_id());
 			JSONObject wrapperMsg = new JSONObject();
 			wrapperMsg.put("code", 200);
-			wrapperMsg.put("user_id", u.getUser_id());
-			return wrapperMsg.toString();
-
+			wrapperMsg.put("info", JSONObject.parseObject(JSON.toJSONString(u)));
+			return wrapperMsg.toJSONString();
 		}
 		else{
 			return wrapperMsg(404, "wrong password");
 		}
-
 	}
 
 	@RequestMapping(value = "/logout", method = { RequestMethod.POST })
@@ -69,22 +67,27 @@ public class UserController extends CommonController {
 
 
 	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })
-	public String getInfo(@RequestParam(value = "id_num", defaultValue = "self")String id_num,
+	public String getInfo(@RequestParam(value = "id_num", required = false)String id_num,
+	                      @RequestParam(value = "user_id", required = false)Integer uid,
 	                      HttpServletRequest request) {
 		User u = null;
-
-		if(id_num.equals("self")){
-			u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
+		System.out.println(id_num);
+		System.out.println(uid);
+		if(id_num == null){
+			if(uid == null) {
+				u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
+			}
+			else{
+				u = userMapper.getById(uid);
+			}
 		}
 		else {
-			try {
-				u = userMapper.getByIdNum(id_num);
-			} catch (Exception e){
-				return wrapperMsg(404, "user not exist");
-			}
-
+			u = userMapper.getByIdNum(id_num);
 		}
 
+		if(u == null){
+			return wrapperMsg(404, "user not exist");
+		}
 		JSONObject userinfo = JSONObject.parseObject(JSON.toJSONString(u));
 		userinfo.remove("password");
 		JSONObject wrapperMsg = new JSONObject();
@@ -92,6 +95,8 @@ public class UserController extends CommonController {
 		wrapperMsg.put("info", userinfo);
 		return wrapperMsg.toJSONString();
 	}
+
+
 
 	@RequestMapping(value = "/modify-info", method = { RequestMethod.POST })
 	public String updateInfo(@RequestParam(value = "avatar", defaultValue = "")String avartar,

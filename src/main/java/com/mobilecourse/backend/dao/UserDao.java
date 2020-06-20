@@ -20,8 +20,12 @@ public interface UserDao {
 
 	User getBySectionId(int section_id);
 
+	User getAdminBySectionId(int section_id);
+
 	void updateInfo(int user_id, String avatar, String status);
 
-	void updateInfoAuth(int user_id, Boolean verified, String dept_name,
+	void updateInfoAuth(int user_id, int verified, String dept_name,
 	                    String user_type, String id_num, int section_id);
+
+	void updateAuthStatus(int user_id, int verified);
 }

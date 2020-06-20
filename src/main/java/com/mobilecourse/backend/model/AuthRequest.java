@@ -4,10 +4,20 @@ public class AuthRequest {
 	private int request_id;
 	private int sender_id;
 	private int receiver_id;
+	private String username;
 	private String dept_name;
 	private String id_num;
 	private String user_type;//(type in ('Undergraduate', 'Graduate', 'Staff'))
 	private String id_card;
+
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public int getRequest_id() {
 		return request_id;

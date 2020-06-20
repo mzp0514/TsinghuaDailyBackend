@@ -428,3 +428,11 @@ ALTER TABLE `tsinghuadaily`.`message`
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`receiver_id`, `sender_id`, `send_time`);
 ;
+
+
+
+ALTER TABLE `tsinghuadaily`.`user` 
+CHANGE COLUMN `verified` `verified` INT UNSIGNED ZEROFILL NOT NULL;
+
+ALTER TABLE `tsinghuadaily`.`authrequest` 
+ADD COLUMN `username` VARCHAR(20) NULL AFTER `id_num`;

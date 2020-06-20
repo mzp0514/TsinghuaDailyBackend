@@ -38,6 +38,12 @@
         WHERE section_id = #{section_id}
     </select>
 
+    <select id="getAdminBySectionId" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM user
+        WHERE section_id = #{section_id} AND admin = 1
+    </select>
+
     <update id="updateInfo">
         UPDATE user
         <set>
@@ -58,6 +64,12 @@
             user_type = #{user_type},
             id_num = #{id_num},
             section_id = #{section_id}
+        WHERE user_id = #{user_id};
+    </update>
+
+    <update id="updateAuthStatus">
+        UPDATE user
+        SET verified = #{verified}
         WHERE user_id = #{user_id};
     </update>
 
