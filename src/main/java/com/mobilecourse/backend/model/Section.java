@@ -4,6 +4,7 @@ public class Section {
 	private int section_id;
 	private String section_name;
 	private String category;
+	private String avatar;
 	private int follower_cnt;
 	private int article_cnt;
 
@@ -13,6 +14,14 @@ public class Section {
 
 	public void setSection_id(int section_id) {
 		this.section_id = section_id;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public String getSection_name() {

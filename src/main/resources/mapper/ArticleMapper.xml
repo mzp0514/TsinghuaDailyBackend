@@ -48,10 +48,10 @@
     <insert id="insert"  keyProperty="article_id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.Article">
         INSERT INTO article
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            section_id, title, author_name, publish_time, content, reader, category, view_num, fav_num
+            section_id, title, author_name, publish_time, content, reader, category, view_num, fav_num, like_num
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            #{section_id}, #{title}, #{author_name}, #{publish_time}, #{content}, #{reader}, #{category}, 0, 0
+            #{section_id}, #{title}, #{author_name}, #{publish_time}, #{content}, #{reader}, #{category}, 0, 0, 0
         </trim>;
     </insert>
 
@@ -69,6 +69,12 @@
     <update id="updateFavCnt">
         UPDATE article
         SET fav_num = #{update_num} + fav_num
+        WHERE article_id = #{article_id}
+    </update>
+
+    <update id="updateLikeCnt">
+        UPDATE article
+        SET like_num = #{update_num} + like_num
         WHERE article_id = #{article_id}
     </update>
 

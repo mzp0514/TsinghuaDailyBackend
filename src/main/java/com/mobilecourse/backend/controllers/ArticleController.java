@@ -39,6 +39,9 @@ public class ArticleController extends CommonController {
 	@Autowired
 	private FavouriteDao favouriteMapper;
 
+	@Autowired
+	private LikesDao likeMapper;
+
 
 	@RequestMapping(value = "/cateory-articles", method = { RequestMethod.GET })
 	public String getCategoryArticles(@RequestParam(value = "category") String category,
@@ -47,13 +50,25 @@ public class ArticleController extends CommonController {
 	                                  HttpServletRequest request) {
 		int uid = (int) request.getSession().getAttribute("user_id");
 		User u = userMapper.getById(uid);
+		if(u.getVerified() != 2){
+			return wrapperMsg(404, "not verified");
+		}
 		PageHelper.startPage(page_num, page_size, "article_id desc");
 		List<Article> articles = articleMapper.selectByCategory(category, uid,
 				u.getSection_id(), u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
 		JSONArray js = JSONArray.parseArray(JSON.toJSONString(pageInfo.getList()));
 		for(int i = 0; i < js.size(); i++){
-			js.getJSONObject(i).remove("content");
+			JSONObject obj = js.getJSONObject(i);
+			Favourite f = favouriteMapper.get(uid, (Integer) obj.get("article_id"));
+			Boolean fav = (f != null);
+
+			Likes l = likeMapper.get(uid, (Integer) obj.get("article_id"));
+			Boolean lik = (l != null);
+
+			obj.put("favoured", fav);
+			obj.put("liked", lik);
+			obj.remove("content");
 		}
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
@@ -68,14 +83,25 @@ public class ArticleController extends CommonController {
 	                          HttpServletRequest request) {
 		int uid = (int) request.getSession().getAttribute("user_id");
 		User u = userMapper.getById(uid);
-
+		if(u.getVerified() != 2){
+			return wrapperMsg(404, "not verified");
+		}
 		PageHelper.startPage(page_num, page_size, "article_id desc");
 		List<Article> articles = articleMapper.selectBySectionId(section_id, u.getSection_id(),
 																u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
 		JSONArray js = JSONArray.parseArray(JSON.toJSONString(pageInfo.getList()));
 		for(int i = 0; i < js.size(); i++){
-			js.getJSONObject(i).remove("content");
+			JSONObject obj = js.getJSONObject(i);
+			Favourite f = favouriteMapper.get(uid, (Integer) obj.get("article_id"));
+			Boolean fav = (f != null);
+
+			Likes l = likeMapper.get(uid, (Integer) obj.get("article_id"));
+			Boolean lik = (l != null);
+
+			obj.put("favoured", fav);
+			obj.put("liked", lik);
+			obj.remove("content");
 		}
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
@@ -91,13 +117,26 @@ public class ArticleController extends CommonController {
 		int uid = (int) request.getSession().getAttribute("user_id");
 		User u = userMapper.getById(uid);
 
+		if(u.getVerified() != 2){
+			return wrapperMsg(404, "not verified");
+		}
+
 		PageHelper.startPage(page_num, page_size);
 		List<Article> articles = articleMapper.search(query, u.getSection_id(),
 				u.getType().equals("Staff"));
 		PageInfo pageInfo = new PageInfo(articles);
 		JSONArray js = JSONArray.parseArray(JSON.toJSONString(pageInfo.getList()));
 		for(int i = 0; i < js.size(); i++){
-			js.getJSONObject(i).remove("content");
+			JSONObject obj = js.getJSONObject(i);
+			Favourite f = favouriteMapper.get(uid, (Integer) obj.get("article_id"));
+			Boolean fav = (f != null);
+
+			Likes l = likeMapper.get(uid, (Integer) obj.get("article_id"));
+			Boolean lik = (l != null);
+
+			obj.put("favoured", fav);
+			obj.put("liked", lik);
+			obj.remove("content");
 		}
 		JSONObject wrapperMsg = new JSONObject();
 		wrapperMsg.put("code", 200);
@@ -120,10 +159,20 @@ public class ArticleController extends CommonController {
 			Favourite f = favouriteMapper.get(uid, article_id);
 			Boolean fav = (f != null);
 
+			Likes l = likeMapper.get(uid, article_id);
+			Boolean lik = (l != null);
+
+			User u = userMapper.getById(uid);
+			Boolean is_author = u.getSection_id() == a.getSection_id() && u.getAdmin();
+
+			JSONObject obj = JSONObject.parseObject(JSON.toJSONString(a));
+			obj.put("favoured", fav);
+			obj.put("liked", lik);
+			obj.put("is_author", is_author);
+
 			JSONObject wrapperMsg = new JSONObject();
 			wrapperMsg.put("code", 200);
-			wrapperMsg.put("info", JSONObject.parseObject(JSON.toJSONString(a)));
-			wrapperMsg.put("favoured", fav);
+			wrapperMsg.put("info", obj);
 			return wrapperMsg.toJSONString();
 		}
 		catch (Exception e){
@@ -133,7 +182,6 @@ public class ArticleController extends CommonController {
 
 	@RequestMapping(value = "/publish", method = { RequestMethod.POST })
 	public String publish(@RequestParam(value = "title") String title,
-	                         @RequestParam(value = "author") String author,
 	                         @RequestParam(value = "content") String content,
 	                         @RequestParam(value = "reader") String reader,
 	                         HttpServletRequest request) {
@@ -144,7 +192,7 @@ public class ArticleController extends CommonController {
 		}
 
 		Article a = new Article();
-		a.setAuthor_name(author);
+		a.setAuthor_name(u.getDept_name());
 		a.setPublish_time(Timestamp.valueOf(LocalDateTime.now()));
 		a.setContent(content);
 		a.setReader(reader);
@@ -195,6 +243,29 @@ public class ArticleController extends CommonController {
 		favouriteMapper.delete(uid, article_id);
 
 		articleMapper.updateFavCnt(article_id, -1);
+		return wrapperMsg(200, "success");
+	}
+
+	@RequestMapping(value = "/like", method = { RequestMethod.POST })
+	public String like(@RequestParam(value = "article_id") int article_id,
+	                     HttpServletRequest request) {
+		int uid = (int) request.getSession().getAttribute("user_id");
+		Likes l = new Likes();
+		l.setArticle_id(article_id);
+		l.setUser_id(uid);
+		likeMapper.insert(l);
+
+		articleMapper.updateLikeCnt(article_id, 1);
+		return wrapperMsg(200, "success");
+	}
+
+	@RequestMapping(value = "/dislike", method = { RequestMethod.POST })
+	public String dislike(@RequestParam(value = "article_id") int article_id,
+	                        HttpServletRequest request) {
+		int uid = (int) request.getSession().getAttribute("user_id");
+
+		likeMapper.delete(uid, article_id);
+		articleMapper.updateLikeCnt(article_id, -1);
 		return wrapperMsg(200, "success");
 	}
 

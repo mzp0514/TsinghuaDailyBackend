@@ -21,5 +21,7 @@ public interface ArticleDao {
 
 	void updateFavCnt(int article_id, int update_num);
 
+	void updateLikeCnt(int article_id, int update_num);
+
 	List<Article> search(String query, int self_section_id, boolean is_staff);
 }

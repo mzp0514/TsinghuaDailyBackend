@@ -14,6 +14,7 @@ public class Article implements Comparable<Article> {
 	private String content;
 	private int view_num;
 	private int fav_num;
+	private int like_num;
 	private String reader; //'All', 'Staff', 'Member', 'MemberStaff'
 	private String category;
 
@@ -104,6 +105,14 @@ public class Article implements Comparable<Article> {
 		this.fav_num = fav_num;
 	}
 
+	public int getLike_num() {
+		return like_num;
+	}
+
+	public void setLike_num(int like_num) {
+		this.like_num = like_num;
+	}
+
 	@Override
 	public String toString() {
 		return "Article{" +
@@ -114,6 +123,7 @@ public class Article implements Comparable<Article> {
 				", publish_time=" + publish_time +
 				", view_num=" + view_num +
 				", fav_num=" + fav_num +
+				", like_num=" + like_num +
 				", reader='" + reader + '\'' +
 				'}';
 	}

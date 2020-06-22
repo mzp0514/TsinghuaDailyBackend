@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.LikesDao">
+
+    <insert id="insert"  parameterType="com.mobilecourse.backend.model.Likes">
+        INSERT INTO likes
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            user_id, article_id
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{user_id}, #{article_id}
+        </trim>;
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM likes WHERE user_id=#{user_id} AND article_id=#{article_id}
+    </delete>
+
+    <select id="get" resultType="com.mobilecourse.backend.model.Likes">
+        SELECT * FROM likes WHERE user_id = #{user_id} AND article_id = #{article_id}
+    </select>
+
+    <select id="select" resultType="com.mobilecourse.backend.model.Likes">
+        SELECT * FROM likes WHERE user_id = #{user_id}
+    </select>
+
+</mapper>
