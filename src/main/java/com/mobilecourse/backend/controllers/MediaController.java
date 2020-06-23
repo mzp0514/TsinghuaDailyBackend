@@ -32,13 +32,19 @@ public class MediaController extends CommonController {
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
 	public String upload(@RequestParam(value = "file") MultipartFile file,
 	                     HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 
 		try {
 			InputStream in = file.getInputStream();
 
 			String filename = System.currentTimeMillis() + "." + getFileType(file.getOriginalFilename());
 			String sep = System.getProperty("file.separator");
-			int uid = (int) request.getSession().getAttribute("user_id");
 			String path = "./media" + sep + uid;
 			File f = new File(path);
 			if (!f.exists() && !f.isDirectory()) {
@@ -59,6 +65,7 @@ public class MediaController extends CommonController {
 	public HttpServletResponse getImage(@RequestParam(value = "uid") int uid,
 										@RequestParam(value = "filename") String filename,
 	                                    HttpServletRequest request, HttpServletResponse response) {
+
 		try {
 			String sep = System.getProperty("file.separator");
 			String url= "./media" + sep + uid + sep + filename;

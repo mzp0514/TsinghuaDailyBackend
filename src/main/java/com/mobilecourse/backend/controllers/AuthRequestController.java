@@ -41,7 +41,13 @@ public class AuthRequestController extends CommonController {
 	                      @RequestParam(value = "user_type")String user_type,
 	                      @RequestParam(value = "id_card")String id_card,
 	                      HttpServletRequest request) {
-		int uid = (Integer) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		AuthRequest rq = new AuthRequest();
 		rq.setDept_name(dept_name);
 		rq.setId_card(id_card);
@@ -58,7 +64,13 @@ public class AuthRequestController extends CommonController {
 
 	@RequestMapping(value = "/get-requests", method = { RequestMethod.GET })
 	public String get(HttpServletRequest request) {
-		int uid = (Integer) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		List<AuthRequest> requests = authRequestMapper.get(uid);
 		JSONArray req = JSONArray.parseArray(JSON.toJSONString(requests));
 		JSONObject wrapperMsg = new JSONObject();
@@ -70,6 +82,13 @@ public class AuthRequestController extends CommonController {
 	@RequestMapping(value = "/approve", method = { RequestMethod.POST })
 	public String approve(@RequestParam(value = "request_id")int request_id,
 	                      HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		AuthRequest rq = authRequestMapper.getById(request_id);
 		int section_id = sectionMapper.getBySectionName(rq.getDept_name()).getSection_id();
 		userMapper.updateInfoAuth(rq.getSender_id(), 2, rq.getDept_name(),
@@ -82,6 +101,13 @@ public class AuthRequestController extends CommonController {
 	@RequestMapping(value = "/refuse", method = { RequestMethod.POST })
 	public String refuse(@RequestParam(value = "request_id")int request_id,
 	                      HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		AuthRequest rq = authRequestMapper.getById(request_id);
 		authRequestMapper.delete(request_id);
 		userMapper.updateAuthStatus(rq.getSender_id(), 3);

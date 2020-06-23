@@ -38,7 +38,13 @@ public class CommentController extends CommonController {
 	public String add(@RequestParam(value = "article_id") int article_id,
 	                      @RequestParam(value = "content") String content,
 	                      HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		Comment c = new Comment();
 		c.setArticle_id(article_id);
 		c.setContent(content);
@@ -52,7 +58,13 @@ public class CommentController extends CommonController {
 	public String delete(@RequestParam(value = "comment_id") int comment_id,
 	                     @RequestParam(value = "article_id") int article_id,
 	                  HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		User u = userMapper.getById(uid);
 		int section_id = articleMapper.getById(article_id).getSection_id();
 		if(u.getAdmin() && section_id == u.getSection_id()) {
@@ -67,6 +79,13 @@ public class CommentController extends CommonController {
 	@RequestMapping(value = "/get-comments", method = { RequestMethod.GET })
 	public String getComments(@RequestParam(value = "article_id") int article_id,
 	                  HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		List<Comment> comments = commentMapper.select(article_id);
 		JSONArray cmt = JSONArray.parseArray(JSON.toJSONString(comments));
 		for(int i = 0; i < comments.size(); i++){

@@ -33,9 +33,16 @@ public class SectionController extends CommonController {
 	@RequestMapping(value = "/get-sections", method = { RequestMethod.GET })
 	public String getCategorySections(@RequestParam(value = "category", defaultValue = "") String category,
 	                                  HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
+
 		ArrayList<Section> sections = null;
 		if(category.equals("Follow")){
-			int uid = (int) request.getSession().getAttribute("user_id");
 			List<Follow> follows = followMapper.selectByUserId(uid);
 			for(int i = 0; i < follows.size(); i++){
 				sections.add(sectionMapper.getBySectionId(follows.get(i).getSection_id()));
@@ -56,6 +63,13 @@ public class SectionController extends CommonController {
 	@RequestMapping(value = "/follow", method = { RequestMethod.POST })
 	public String follow(@RequestParam(value = "section_id") int section_id,
 	                     HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		Follow f = new Follow();
 		f.setSection_id(section_id);
 		f.setUser_id((Integer) request.getSession().getAttribute("user_id"));
@@ -67,6 +81,13 @@ public class SectionController extends CommonController {
 	@RequestMapping(value = "/unfollow", method = { RequestMethod.POST })
 	public String unfollow(@RequestParam(value = "section_id") int section_id,
 	                     HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		Follow f = new Follow();
 		f.setSection_id(section_id);
 		f.setUser_id((Integer) request.getSession().getAttribute("user_id"));
@@ -78,7 +99,13 @@ public class SectionController extends CommonController {
 	@RequestMapping(value = "/section-info", method = { RequestMethod.GET })
 	public String sectionInfo(@RequestParam(value = "section_id") int section_id,
 	                       HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		Follow f = followMapper.get(uid, section_id);
 		Boolean followed = true;
 		if(f == null){

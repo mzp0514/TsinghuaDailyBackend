@@ -81,7 +81,13 @@ public class ArticleController extends CommonController {
 	                                 @RequestParam(value = "page_num") int page_num,
 	                                 @RequestParam(value = "page_size", defaultValue = "10") int page_size,
 	                          HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		User u = userMapper.getById(uid);
 		if(u.getVerified() != 2){
 			return wrapperMsg(404, "not verified");
@@ -114,7 +120,13 @@ public class ArticleController extends CommonController {
 	                     @RequestParam(value = "page_num") int page_num,
 	                     @RequestParam(value = "page_size", defaultValue = "10") int page_size,
 	                                 HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		User u = userMapper.getById(uid);
 
 		if(u.getVerified() != 2){
@@ -147,8 +159,15 @@ public class ArticleController extends CommonController {
 	@RequestMapping(value = "/article", method = { RequestMethod.GET })
 	public String getArticle(@RequestParam(value = "article_id") int article_id,
 	                                 HttpServletRequest request) {
+		int uid = 0;
 		try {
-			int uid = (int) request.getSession().getAttribute("user_id");
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
+
+		try {
 			Article a = articleMapper.getById(article_id);
 			if(a == null){
 				return wrapperMsg(404, "article not exist");
@@ -185,7 +204,13 @@ public class ArticleController extends CommonController {
 	                         @RequestParam(value = "content") String content,
 	                         @RequestParam(value = "reader") String reader,
 	                         HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		User u = userMapper.getById(uid);
 		if(!u.getAdmin()){
 			return wrapperMsg(404, "no authority");
@@ -207,7 +232,13 @@ public class ArticleController extends CommonController {
 	@RequestMapping(value = "/delete", method = { RequestMethod.POST })
 	public String publish(@RequestParam(value = "article_id") int article_id,
 	                      HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		User u = userMapper.getById(uid);
 		if(!u.getAdmin()){
 			return wrapperMsg(404, "no authority");
@@ -225,7 +256,13 @@ public class ArticleController extends CommonController {
 	@RequestMapping(value = "/favour", method = { RequestMethod.POST })
 	public String favour(@RequestParam(value = "article_id") int article_id,
 	                         HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		Favourite f = new Favourite();
 		f.setArticle_id(article_id);
 		f.setUser_id(uid);
@@ -238,7 +275,13 @@ public class ArticleController extends CommonController {
 	@RequestMapping(value = "/disfavour", method = { RequestMethod.POST })
 	public String disfavour(@RequestParam(value = "article_id") int article_id,
 	                     HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 
 		favouriteMapper.delete(uid, article_id);
 
@@ -249,7 +292,13 @@ public class ArticleController extends CommonController {
 	@RequestMapping(value = "/like", method = { RequestMethod.POST })
 	public String like(@RequestParam(value = "article_id") int article_id,
 	                     HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 		Likes l = new Likes();
 		l.setArticle_id(article_id);
 		l.setUser_id(uid);
@@ -262,7 +311,13 @@ public class ArticleController extends CommonController {
 	@RequestMapping(value = "/dislike", method = { RequestMethod.POST })
 	public String dislike(@RequestParam(value = "article_id") int article_id,
 	                        HttpServletRequest request) {
-		int uid = (int) request.getSession().getAttribute("user_id");
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
 
 		likeMapper.delete(uid, article_id);
 		articleMapper.updateLikeCnt(article_id, -1);

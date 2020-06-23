@@ -68,17 +68,24 @@ public class UserController extends CommonController {
 
 	@RequestMapping(value = "/get-info", method = { RequestMethod.GET })
 	public String getInfo(@RequestParam(value = "id_num", required = false)String id_num,
-	                      @RequestParam(value = "user_id", required = false)Integer uid,
+	                      @RequestParam(value = "user_id", required = false)Integer user_id,
 	                      HttpServletRequest request) {
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
+
 		User u = null;
-		System.out.println(id_num);
-		System.out.println(uid);
+
 		if(id_num == null){
-			if(uid == null) {
-				u = userMapper.getById((int) request.getSession().getAttribute("user_id"));
+			if(user_id == null) {
+				u = userMapper.getById(uid);
 			}
 			else{
-				u = userMapper.getById(uid);
+				u = userMapper.getById(user_id);
 			}
 		}
 		else {
@@ -102,8 +109,15 @@ public class UserController extends CommonController {
 	public String updateInfo(@RequestParam(value = "avatar", defaultValue = "")String avartar,
 	                     @RequestParam(value = "status",  defaultValue = "")String status,
 	                     HttpServletRequest request) {
-		userMapper.updateInfo((int) request.getSession().getAttribute("user_id"),
-								avartar, status);
+		int uid = 0;
+		try {
+			uid = (int) request.getSession().getAttribute("user_id");
+		} catch (Exception e){
+			e.printStackTrace();
+			return wrapperMsg(404, "please log in");
+		}
+
+		userMapper.updateInfo(uid, avartar, status);
 		return wrapperMsg(200, "success");
 	}
 
